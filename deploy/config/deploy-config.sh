@@ -2,7 +2,7 @@
 
 # Configuration
 APP_NAME="charter"
-PORT=5005
+PORT=5007
 VPS_ALIAS="vps"
 
 
