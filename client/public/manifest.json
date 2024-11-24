@@ -1,0 +1,26 @@
+{
+  "short_name": "Charter",
+  "name": "Charter",
+  "icons": [
+    {
+      "src": "/charter/icons8-dots-ios-17-outlined-16.png",
+      "sizes": "16x16",
+      "type": "image/png"
+    },
+    {
+      "src": "/charter/icons8-dots-ios-17-outlined-32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/charter/icons8-dots-ios-17-outlined-96.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "/charter/",
+  "display": "standalone",
+  "theme_color": "#4CAF50",
+  "background_color": "#ffffff",
+  "scope": "/charter/"
+}
