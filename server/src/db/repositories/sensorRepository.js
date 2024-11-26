@@ -37,5 +37,18 @@ export const sensorRepository = {
       },
       orderBy: { createdAt: 'asc' }
     });
-  }
-}; 
+  },
+
+  createBatch: async (readings) => {
+    return await prisma.sensorData.createMany({
+      data: readings.map(reading => ({
+        type: reading.type,
+        value: parseFloat(reading.value),
+        deviceId: reading.deviceId,
+        createdAt: reading.timestamp || new Date()
+      })),
+    });
+  },
+  
+
+};
