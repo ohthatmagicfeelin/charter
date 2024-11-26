@@ -17,5 +17,25 @@ export const sensorRepository = {
       orderBy: { createdAt: 'desc' },
       take: limit
     });
+  },
+
+  getLatestReadings: async (limit = 100, types = null) => {
+    return prisma.sensorData.findMany({
+      where: types ? { type: { in: types } } : undefined,
+      orderBy: { createdAt: 'desc' },
+      take: limit
+    });
+  },
+
+  getReadingsByType: async (type, hours = 24) => {
+    const startTime = new Date(Date.now() - hours * 60 * 60 * 1000);
+    
+    return prisma.sensorData.findMany({
+      where: {
+        type,
+        createdAt: { gte: startTime }
+      },
+      orderBy: { createdAt: 'asc' }
+    });
   }
 }; 

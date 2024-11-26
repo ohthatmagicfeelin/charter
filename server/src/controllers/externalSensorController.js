@@ -2,7 +2,7 @@ import { catchAsync } from '../utils/catchAsync.js';
 import { AppError } from '../utils/AppError.js';
 import { sensorService } from '../services/sensorService.js';
 
-export const sensorController = {
+export const externalSensorController = {
   create: catchAsync(async (req, res) => {
     const { value, type, deviceId } = req.body;
 

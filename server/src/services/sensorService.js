@@ -16,5 +16,21 @@ export const sensorService = {
     } catch (error) {
       throw new AppError('Error fetching sensor data', 500);
     }
+  },
+
+  getLatestReadings: async (limit = 100, types = null) => {
+    try {
+      return await sensorRepository.getLatestReadings(limit, types);
+    } catch (error) {
+      throw new AppError('Error fetching sensor data', 500);
+    }
+  },
+
+  getReadingsByType: async (type, hours = 24) => {
+    try {
+      return await sensorRepository.getReadingsByType(type, hours);
+    } catch (error) {
+      throw new AppError('Error fetching sensor data', 500);
+    }
   }
 }; 

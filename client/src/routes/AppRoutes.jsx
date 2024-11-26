@@ -9,7 +9,7 @@ import { Settings } from '@/pages/Settings';
 import { MainLayout } from '@/layouts/MainLayout';
 import { useAuth } from '@/contexts/AuthContext';
 
-const Home = lazy(() => import('@/components/Home'));
+const Dashboard = lazy(() => import('@/components/Dashboard'));
 const NotFound = lazy(() => import('@/components/error/NotFound'));
 
 function AppRoutes() {
@@ -27,7 +27,7 @@ function AppRoutes() {
           {/* Root redirect */}
           <Route 
             path="/" 
-            element={<Navigate to={isAuthenticated ? "/home" : "/login"} replace />} 
+            element={<Dashboard />} 
           />
 
           {/* Public routes - redirect if authenticated */}
@@ -50,7 +50,7 @@ function AppRoutes() {
             path="/home"
             element={
               <ProtectedRoute>
-                <Home />
+                <Dashboard />
               </ProtectedRoute>
             }
           />
