@@ -8,6 +8,7 @@ import feedbackRoutes from './feedbackRoutes.js';
 import { apiLimiter } from '../middleware/rateLimiter.js';
 import settingsRoutes from './settingsRoutes.js';
 import sessionRoutes from './sessionRoutes.js';
+import sensorRoutes from './sensorRoutes.js';
 
 const router = express.Router();
 
@@ -15,7 +16,10 @@ const router = express.Router();
 const isProduction = config.NODE_ENV === 'production';
 const basePath = isProduction ? config.APP_ROUTE : '';
 
+// ESP32 routes - no session/CSRF requirements
+router.use(`${basePath}/api/v1/sensor`, sensorRoutes);
 
+// Protected routes with session/CSRF
 router.use(`${basePath}/api`, apiLimiter);
 router.use(`${basePath}/api`, apiRoutes);
 router.use(`${basePath}/api`, paymentRoutes)
@@ -24,6 +28,5 @@ router.use(`/api/health`, deployRoutes);
 router.use(`${basePath}/api/feedback`, feedbackRoutes);
 router.use(`${basePath}/api/settings`, settingsRoutes);
 router.use(`${basePath}/api/sessions`, sessionRoutes);
-
 
 export default router;

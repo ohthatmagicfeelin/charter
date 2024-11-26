@@ -48,5 +48,7 @@ export default {
     EMAIL_FROM_NAME: process.env.EMAIL_FROM_NAME,
 
     TELEGRAM_BOT_TOKEN: process.env.TELEGRAM_BOT_TOKEN,
-    TELEGRAM_CHAT_ID: process.env.TELEGRAM_CHAT_ID
+    TELEGRAM_CHAT_ID: process.env.TELEGRAM_CHAT_ID,
+
+    ESP32_API_KEY: process.env.ESP32_API_KEY
 };

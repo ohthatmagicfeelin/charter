@@ -88,7 +88,7 @@ code .
 add the following to `./nginx-config/.env`:
 ```
 CHARTER_ROOT=/var/www/charter/client/build
-CHARTER_PORT=5005
+CHARTER_PORT=5007
 ```
 
 add the following to `./nginx-config/sites-available/includes/apps/charter.conf.template`:
