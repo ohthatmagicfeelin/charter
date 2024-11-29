@@ -140,7 +140,7 @@ export const getChartOptions = (dataType, dateRange, getDateRange) => {
         enabled: true,
         mode: 'index',
         intersect: false,
-        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+        backgroundColor: 'rgba(255, 255, 255, 0.95)',
         titleColor: '#1a202c',
         bodyColor: '#4a5568',
         borderColor: '#e2e8f0',
@@ -149,6 +149,11 @@ export const getChartOptions = (dataType, dateRange, getDateRange) => {
         bodyFont: {
           size: 14
         },
+        position: 'nearest',
+        yAlign: 'top',
+        xAlign: 'center',
+        caretSize: 8,
+        caretPadding: 10,
         callbacks: {
           label: (context) => {
             let label = context.dataset.label || '';
