@@ -52,7 +52,6 @@ const calculateMovingAverage = (data, windowSize = 5) => {
 };
 
 export const prepareChartData = (dataType, sensorData) => {
-  console.log('Preparing chart data:', { dataType, sensorData });
 
   const createGradient = (ctx) => {
     const gradient = ctx.createLinearGradient(0, 0, 0, 400);
@@ -78,10 +77,7 @@ export const prepareChartData = (dataType, sensorData) => {
     }))
     .sort((a, b) => a.x - b.x);
 
-  console.log('Filtered data:', filteredData);
-
   const smoothedData = calculateMovingAverage(filteredData, 7);
-  console.log('Smoothed data:', smoothedData);
 
   return {
     datasets: [{
@@ -100,6 +96,39 @@ export const getChartOptions = (dataType, dateRange, getDateRange) => {
   const { start, end } = getDateRange(dateRange);
   const isMobile = window.innerWidth < 480;
   
+  const getTimeConfig = () => {
+    if (dateRange === '1d') {
+      const today = new Date();
+      const startOfDay = new Date(today.setHours(0, 0, 0, 0));
+      const endOfDay = new Date(today.setHours(23, 59, 59, 999));
+      
+      return {
+        min: startOfDay.toISOString(),
+        max: endOfDay.toISOString(),
+        time: {
+          unit: 'hour',
+          displayFormats: {
+            hour: 'HH:mm'
+          },
+          stepSize: 3,
+        }
+      };
+    }
+
+    return {
+      min: start.toISOString(),
+      max: end.toISOString(),
+      time: {
+        unit: 'day',
+        displayFormats: {
+          day: 'MMM d'
+        },
+      }
+    };
+  };
+
+  const timeConfig = getTimeConfig();
+
   return {
     responsive: true,
     maintainAspectRatio: false,
@@ -135,20 +164,12 @@ export const getChartOptions = (dataType, dateRange, getDateRange) => {
     scales: {
       x: {
         type: 'time',
-        time: {
-          unit: dateRange === '1d' ? 'hour' : 'day',
-          displayFormats: {
-            hour: 'HH:mm',
-            day: 'MMM d'
-          },
-        },
+        ...timeConfig,
         adapters: {
           date: {
             locale: enUS,
           },
         },
-        min: start.toISOString(),
-        max: end.toISOString(),
         grid: {
           display: false
         },

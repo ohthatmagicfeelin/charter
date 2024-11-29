@@ -30,7 +30,7 @@ export const externalSensorController = {
 
   createBatchReadings: catchAsync(async (req, res) => {
     const readings = req.body;
-    
+    console.log(readings);
     // Convert object with numeric keys to array
     const readingsArray = Object.values(readings);
     
