@@ -10,7 +10,8 @@
     "db:backup": "bash deploy/local/manual-db-backup.sh create",
     "db:list": "bash deploy/local/manual-db-backup.sh list",
     "db:restore": "bash deploy/local/manual-db-backup.sh restore",
-    "db:prod-to-dev": "./deploy/scripts/db/prodDataToDev/pg_dump.sh"
+    "db:prod-to-dev": "./deploy/scripts/db/prodDataToDev/pg_dump.sh",
+    "db:dev-to-prod": "./deploy/scripts/db/devDataToProd/pg_dump.sh"
   },
   "keywords": [],
   "author": "",
