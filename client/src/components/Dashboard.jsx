@@ -43,11 +43,14 @@ const Dashboard = () => {
         </p>
       </div>
 
-      <div className="rounded-lg sm:rounded-2xl overflow-hidden bg-white dark:bg-gray-800 
-        shadow-[4px_4px_8px_rgba(0,0,0,0.1),_-4px_-4px_8px_rgba(255,255,255,0.9)]
-        dark:shadow-[4px_4px_8px_rgba(0,0,0,0.3),_-4px_-4px_8px_rgba(255,255,255,0.05)]"
-      >
-        <SensorChartDisplay options={options} data={chartData} isLoading={isLoading} />
+      <div className="space-y-4 sm:space-y-6">
+        <div className="rounded-lg sm:rounded-2xl overflow-hidden bg-white dark:bg-gray-800 
+          shadow-[4px_4px_8px_rgba(0,0,0,0.1),_-4px_-4px_8px_rgba(255,255,255,0.9)]
+          dark:shadow-[4px_4px_8px_rgba(0,0,0,0.3),_-4px_-4px_8px_rgba(255,255,255,0.05)]"
+        >
+          <SensorChartDisplay options={options} data={chartData} isLoading={isLoading} />
+        </div>
+        
         <SensorChartControls
           tabs={tabs}
           dateRanges={dateRanges}
