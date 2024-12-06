@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { subHours, subDays } from 'date-fns';
+import { subHours, subDays, addDays } from 'date-fns';
 import { sensorApi } from '@/api/sensorApi';
 
 export const useSensorCharts = () => {
@@ -19,10 +19,18 @@ export const useSensorCharts = () => {
       '30d': 720,
     };
 
-    const hours = hoursMap[range];
-    const start = subHours(now, hours);
-    
-    return { start, end: now };
+    let start, end;
+
+    if (range === '1d') {
+      start = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      end = addDays(start, 1);
+    } else {
+      const hours = hoursMap[range];
+      start = subHours(now, hours);
+      end = now;
+    }
+
+    return { start, end };
   };
 
   useEffect(() => {
@@ -34,7 +42,7 @@ export const useSensorCharts = () => {
         
         const hours = Math.ceil((end - start) / (1000 * 60 * 60));
         const response = await sensorApi.getReadingsByType(activeTab, hours);
-        
+
         setSensorData(response.data);
       } catch (err) {
         setError(err.message);

@@ -1,4 +1,4 @@
-import { enUS } from 'date-fns/locale';
+import { format, toZonedTime } from 'date-fns-tz';
 
 const chartTheme = {
   temperature: {
@@ -60,16 +60,19 @@ export const prepareChartData = (type, data) => {
   }
 
   return {
-    labels: data.map(d => new Date(d.createdAt).toLocaleString('en-AU', {
+    labels: data.map(d => toZonedTime(d.createdAt, 'UTC').toLocaleString('en-AU', {
       hour: '2-digit',
-      minute: '2-digit',
+      minute: '2-digit', 
       hour12: false,
       timeZone: 'Australia/Sydney'
     })),
     datasets: [
       {
         label: type.charAt(0).toUpperCase() + type.slice(1),
-        data: data.map(d => d.value),
+        data: data.map(d => ({
+          x: toZonedTime(d.createdAt, 'UTC'),
+          y: d.value
+        })),
         borderColor: chartTheme[type].line,
         backgroundColor: chartTheme[type].gradient.start,
         fill: true,
@@ -83,7 +86,7 @@ export const prepareChartData = (type, data) => {
 
 export const getChartOptions = (type, dateRange, getDateRange) => {
   const { start, end } = getDateRange(dateRange);
-  
+
   let timeUnit = 'hour';
   let maxTicksLimit = 12;
 
@@ -119,7 +122,7 @@ export const getChartOptions = (type, dateRange, getDateRange) => {
     },
     scales: {
       x: {
-        type: 'category',
+        type: 'time',
         grid: {
           display: false
         },
@@ -127,7 +130,9 @@ export const getChartOptions = (type, dateRange, getDateRange) => {
           maxRotation: 0,
           autoSkip: true,
           maxTicksLimit
-        }
+        },
+        min: start,
+        max: end
       },
       y: {
         beginAtZero: false,
