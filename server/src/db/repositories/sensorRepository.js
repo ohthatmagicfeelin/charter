@@ -28,15 +28,40 @@ export const sensorRepository = {
   },
 
   getReadingsByType: async (type, hours = 24) => {
-    const startTime = new Date(Date.now() - hours * 60 * 60 * 1000);
+    // Create dates in Sydney timezone
+    const now = new Date();
+    const startTime = new Date(now - hours * 60 * 60 * 1000);
     
-    return prisma.sensorData.findMany({
+    // Convert to UTC for query
+    const utcNow = new Date(now.toLocaleString('en-US', { timeZone: 'Australia/Sydney' }));
+    const utcStartTime = new Date(startTime.toLocaleString('en-US', { timeZone: 'Australia/Sydney' }));
+    
+    // Add 11 hours to account for Sydney timezone
+    utcNow.setHours(utcNow.getHours() + 11);
+    utcStartTime.setHours(utcStartTime.getHours() + 11);
+    
+    console.log('Query time range:', {
+        localStart: startTime.toISOString(),
+        localEnd: now.toISOString(),
+        utcStart: utcStartTime.toISOString(),
+        utcEnd: utcNow.toISOString(),
+        type,
+        currentTime: new Date().toISOString()
+    });
+    
+    const results = await prisma.sensorData.findMany({
       where: {
         type,
-        createdAt: { gte: startTime }
+        createdAt: {
+          gte: utcStartTime,
+          lte: utcNow
+        }
       },
       orderBy: { createdAt: 'asc' }
     });
+    
+    console.log(`Found ${results.length} records`);
+    return results;
   },
 
   createBatch: async (readings) => {

@@ -22,6 +22,16 @@ ChartJS.register(
   Legend
 );
 
+const formatDateTime = (dateString) => {
+  const date = new Date(dateString);
+  return date.toLocaleString('en-AU', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+    timeZone: 'Australia/Sydney'
+  });
+};
+
 const SensorChart = ({ type, hours = 24 }) => {
   const { data, loading, error } = useSensorData(type, hours);
 
@@ -29,7 +39,7 @@ const SensorChart = ({ type, hours = 24 }) => {
   if (error) return <div>Error: {error}</div>;
 
   const chartData = {
-    labels: data.map(d => new Date(d.createdAt).toLocaleTimeString()),
+    labels: data.map(d => formatDateTime(d.createdAt)),
     datasets: [
       {
         label: type,

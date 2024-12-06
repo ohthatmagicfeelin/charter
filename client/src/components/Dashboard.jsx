@@ -29,6 +29,8 @@ const Dashboard = () => {
     isLoading
   } = useSensorCharts();
 
+  console.log('Sensor Data:', sensorData);
+
   const chartData = prepareChartData(activeTab, sensorData);
   const options = getChartOptions(activeTab, dateRange, getDateRange);
 
