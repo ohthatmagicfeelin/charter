@@ -4,10 +4,26 @@ import { sensorApi } from '@/api/sensorApi';
 
 export const useSensorCharts = () => {
   const [sensorData, setSensorData] = useState([]);
-  const [activeTab, setActiveTab] = useState('temperature');
+  const [dataTypes, setDataTypes] = useState([{ id: 'temperature', active: true }]);
   const [dateRange, setDateRange] = useState('1d');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const addDataType = () => {
+    setDataTypes(current => [...current, { id: 'temperature', active: true }]);
+  };
+
+  const removeDataType = (index) => {
+    setDataTypes(current => current.filter((_, i) => i !== index));
+  };
+
+  const updateDataType = (index, newType) => {
+    setDataTypes(current => 
+      current.map((type, i) => 
+        i === index ? { ...type, id: newType } : type
+      )
+    );
+  };
 
   const getDateRange = (range) => {
     const now = new Date();
@@ -41,7 +57,7 @@ export const useSensorCharts = () => {
         const { start, end } = getDateRange(dateRange);
         
         const hours = Math.ceil((end - start) / (1000 * 60 * 60));
-        const response = await sensorApi.getReadingsByType(activeTab, hours);
+        const response = await sensorApi.getReadingsByType(dataTypes[0].id, hours);
 
         setSensorData(response.data);
       } catch (err) {
@@ -56,12 +72,14 @@ export const useSensorCharts = () => {
     const interval = setInterval(fetchData, 60000);
 
     return () => clearInterval(interval);
-  }, [activeTab, dateRange]);
+  }, [dataTypes, dateRange]);
 
   return {
     sensorData,
-    activeTab,
-    setActiveTab,
+    dataTypes,
+    addDataType,
+    removeDataType,
+    updateDataType,
     dateRange,
     setDateRange,
     getDateRange,

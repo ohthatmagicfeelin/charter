@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
 import SensorChartDisplay from '@/components/sensor/SensorChartDisplay';
 import { DateRangeSelector } from '@/components/sensor/DateRangeSelector';
 import { DataTypeSelector } from '@/components/sensor/DataTypeSelector';
@@ -22,16 +22,47 @@ const dateRanges = [
 const Dashboard = () => {
   const {
     sensorData,
-    activeTab,
-    setActiveTab,
+    dataTypes,
+    addDataType,
+    removeDataType,
+    updateDataType,
     dateRange,
     setDateRange,
     getDateRange,
     isLoading
   } = useSensorCharts();
 
-  const chartData = prepareChartData(activeTab, sensorData);
-  const options = getChartOptions(activeTab, dateRange, getDateRange);
+  const scrollPositionRef = useRef(0);
+  
+  // Disable browser's automatic scroll restoration
+  useLayoutEffect(() => {
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual';
+    }
+    return () => {
+      if ('scrollRestoration' in history) {
+        history.scrollRestoration = 'auto';
+      }
+    };
+  }, []);
+
+  // Handle scroll position preservation
+  useLayoutEffect(() => {
+    if (isLoading) return; // Don't restore scroll while loading
+    
+    scrollPositionRef.current = window.scrollY;
+    
+    const frame1 = requestAnimationFrame(() => {
+      const frame2 = requestAnimationFrame(() => {
+        window.scrollTo(0, scrollPositionRef.current);
+      });
+      return () => cancelAnimationFrame(frame2);
+    });
+    return () => cancelAnimationFrame(frame1);
+  }, [dataTypes, sensorData, dateRange, isLoading]);
+
+  const chartData = prepareChartData(dataTypes[0].id, sensorData);
+  const options = getChartOptions(dataTypes[0].id, dateRange, getDateRange);
 
   return (
     <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 py-6 sm:py-12">
@@ -60,8 +91,10 @@ const Dashboard = () => {
         
         <DataTypeSelector
           tabs={tabs}
-          activeTab={activeTab}
-          onTabChange={setActiveTab}
+          dataTypes={dataTypes}
+          onAdd={addDataType}
+          onRemove={removeDataType}
+          onTypeChange={updateDataType}
         />
       </div>
     </div>
