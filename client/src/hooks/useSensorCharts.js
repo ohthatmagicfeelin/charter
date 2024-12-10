@@ -20,6 +20,8 @@ export const useSensorCharts = () => {
     setDataTypes(current => [...current, { 
       id: 'temperature',
       deviceId: 'esp32_001',
+      yMin: null,
+      yMax: null,
       active: true 
     }]);
   };
@@ -29,17 +31,21 @@ export const useSensorCharts = () => {
   };
 
   const updateDataType = (index, newType) => {
-    setDataTypes(current => 
-      current.map((type, i) => 
-        i === index ? { ...type, id: newType } : type
+    setDataTypes(current =>
+      current.map((dataType, i) =>
+        i === index
+          ? { ...dataType, id: newType, yMin: null, yMax: null }
+          : dataType
       )
     );
   };
 
   const updateDeviceId = (index, deviceId) => {
     setDataTypes(current =>
-      current.map((type, i) =>
-        i === index ? { ...type, deviceId } : type
+      current.map((dataType, i) =>
+        i === index
+          ? { ...dataType, deviceId, yMin: null, yMax: null }
+          : dataType
       )
     );
   };
@@ -101,21 +107,34 @@ export const useSensorCharts = () => {
         setError(null);
         
         const { hours } = getDateRange(dateRange);
-        console.log('Fetching data for types:', dataTypes);
         
         const results = await Promise.all(
           dataTypes.map(async (type) => {
             if (!type.id || !type.deviceId) return { typeId: type.id, data: [] };
             
             try {
-              console.log(`Fetching data for type ${type.id}, device ${type.deviceId}`);
               const response = await sensorApi.getReadingsByDeviceAndType(
                 type.deviceId,
                 type.id,
                 hours
               );
-              console.log(`Received data for ${type.id}:`, response);
+
               const dataArray = response?.data || [];
+              
+              // Calculate default range if not manually set
+              if (type.yMin === null || type.yMax === null) {
+                const { min, max } = getDefaultYAxisRange(dataArray);
+                setDataTypes(current =>
+                  current.map((t, i) =>
+                    t.id === type.id ? { 
+                      ...t, 
+                      yMin: t.yMin === null ? min : t.yMin,
+                      yMax: t.yMax === null ? max : t.yMax
+                    } : t
+                  )
+                );
+              }
+              
               return { typeId: type.id, data: dataArray };
             } catch (err) {
               console.error(`Error fetching data for type ${type.id}:`, err);
@@ -129,7 +148,7 @@ export const useSensorCharts = () => {
           return acc;
         }, {});
         
-        console.log('Setting sensor data:', newData);
+
         setSensorData(newData);
       } catch (err) {
         console.error('Error fetching sensor data:', err);

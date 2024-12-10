@@ -87,7 +87,6 @@ const Dashboard = () => {
     };
   });
 
-  console.log('Final chart datasets:', chartDataSets);
 
   return (
     <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 py-6 sm:py-12">

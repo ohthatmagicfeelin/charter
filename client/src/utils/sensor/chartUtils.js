@@ -82,10 +82,10 @@ export const prepareChartData = (type, data) => {
   // Ensure data is an array
   const safeData = Array.isArray(data) ? data : [];
   
-  console.log('prepareChartData input:', { type, dataLength: safeData.length });
+
   
   if (!type || safeData.length === 0) {
-    console.log('Returning empty chart data for type:', type);
+
     return {
       labels: [],
       datasets: [{
@@ -119,7 +119,7 @@ export const prepareChartData = (type, data) => {
     }]
   };
   
-  console.log('Prepared chart data:', chartData);
+
   return chartData;
 };
 
