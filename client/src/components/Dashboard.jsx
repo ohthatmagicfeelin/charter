@@ -1,7 +1,7 @@
 import React, { useLayoutEffect, useRef } from 'react';
 import SensorChartDisplay from '@/components/sensor/SensorChartDisplay';
 import { DateRangeSelector } from '@/components/sensor/DateRangeSelector';
-import { DataTypeSelector } from '@/components/sensor/DataTypeSelector';
+import { DataTypeSelector } from '@/components/sensor/dataTypeSelector';
 import { useSensorCharts } from '@/hooks/useSensorCharts.js';
 import { prepareChartData, getChartOptions } from '@/utils/sensor/chartUtils';
 
@@ -27,6 +27,7 @@ const Dashboard = () => {
     removeDataType,
     updateDataType,
     updateDeviceId,
+    updateYAxisRange,
     dateRange,
     setDateRange,
     getDateRange,
@@ -62,11 +63,20 @@ const Dashboard = () => {
     return () => cancelAnimationFrame(frame1);
   }, [dataTypes, sensorData, dateRange, isLoading]);
 
-  const chartData = prepareChartData(dataTypes[0].id, sensorData);
-  const options = getChartOptions(dataTypes[0].id, dateRange, getDateRange);
-
-  // Add logging
-  console.log('Dashboard render:', { dataTypes, dateRange });
+  // Only prepare chart data if we have a selected type
+  const activeType = dataTypes[0];
+  const chartData = prepareChartData(
+    activeType?.id,  // Might be undefined initially
+    sensorData
+  );
+  
+  const options = getChartOptions(
+    activeType?.id, 
+    dateRange, 
+    getDateRange,
+    activeType?.yMin,
+    activeType?.yMax
+  );
 
   return (
     <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 py-6 sm:py-12">
@@ -100,6 +110,7 @@ const Dashboard = () => {
           onRemove={removeDataType}
           onTypeChange={updateDataType}
           onDeviceChange={updateDeviceId}
+          onRangeChange={updateYAxisRange}
         />
       </div>
     </div>

@@ -5,6 +5,8 @@ deploy_project_files() {
     [ -z "$REMOTE_ROOT" ] && { echo "Error: REMOTE_ROOT is not set"; exit 1; }
 
     local LOCAL_ROOT="$1"
+    ls -la $LOCAL_ROOT/client/src/components/sensor
+    ls -la $LOCAL_ROOT/client/src/components/sensor/DataTypeSelector
 
     rsync -avz --delete \
            --exclude '**/node_modules' \

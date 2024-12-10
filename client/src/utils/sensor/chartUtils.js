@@ -28,6 +28,14 @@ const chartTheme = {
       end: 'rgba(153, 102, 255, 0.1)'      // Light purple
     },
     line: 'rgb(153, 102, 255)'
+  },
+  // Default theme for unknown types
+  default: {
+    gradient: {
+      start: 'rgba(156, 163, 175, 0.8)',   // Gray
+      end: 'rgba(156, 163, 175, 0.1)'      // Light gray
+    },
+    line: 'rgb(156, 163, 175)'
   }
 };
 
@@ -52,12 +60,26 @@ const calculateMovingAverage = (data, windowSize = 5) => {
 };
 
 export const prepareChartData = (type, data) => {
-  if (!data || data.length === 0) {
+  if (!type || !data || data.length === 0) {
     return {
       labels: [],
-      datasets: []
+      datasets: [{
+        label: 'No Data',
+        data: [],
+        borderColor: chartTheme.default.line,
+        backgroundColor: chartTheme.default.gradient.start,
+        fill: true,
+        tension: 0.4,
+        pointRadius: 2,
+        pointHoverRadius: 5
+      }]
     };
   }
+
+  const theme = chartTheme[type] || chartTheme.default;
+  const label = type
+    ? type.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+    : 'Unknown Type';
 
   return {
     labels: data.map(d => toZonedTime(d.createdAt, 'UTC').toLocaleString('en-AU', {
@@ -68,13 +90,13 @@ export const prepareChartData = (type, data) => {
     })),
     datasets: [
       {
-        label: type.charAt(0).toUpperCase() + type.slice(1),
+        label,
         data: data.map(d => ({
           x: toZonedTime(d.createdAt, 'UTC'),
           y: d.value
         })),
-        borderColor: chartTheme[type].line,
-        backgroundColor: chartTheme[type].gradient.start,
+        borderColor: theme.line,
+        backgroundColor: theme.gradient.start,
         fill: true,
         tension: 0.4,
         pointRadius: 2,
@@ -84,7 +106,7 @@ export const prepareChartData = (type, data) => {
   };
 };
 
-export const getChartOptions = (type, dateRange, getDateRange) => {
+export const getChartOptions = (type, dateRange, getDateRange, yMin, yMax) => {
   const { start, end } = getDateRange(dateRange);
 
   let timeUnit = 'hour';
@@ -138,7 +160,9 @@ export const getChartOptions = (type, dateRange, getDateRange) => {
         beginAtZero: false,
         grid: {
           color: 'rgba(0, 0, 0, 0.1)'
-        }
+        },
+        min: yMin ?? 0,  // Default to 0 if null
+        max: yMax ?? 100 // Default to 100 if null
       }
     }
   };

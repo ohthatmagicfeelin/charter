@@ -7,11 +7,14 @@ export const useSensorCharts = () => {
   const [dataTypes, setDataTypes] = useState([{ 
     id: 'temperature',
     deviceId: 'esp32_001',
+    yMin: null,
+    yMax: null,
     active: true 
   }]);
   const [dateRange, setDateRange] = useState('1d');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+
 
   const addDataType = () => {
     setDataTypes(current => [...current, { 
@@ -26,7 +29,6 @@ export const useSensorCharts = () => {
   };
 
   const updateDataType = (index, newType) => {
-    console.log('updateDataType called:', { index, newType });
     setDataTypes(current => 
       current.map((type, i) => 
         i === index ? { ...type, id: newType } : type
@@ -35,7 +37,6 @@ export const useSensorCharts = () => {
   };
 
   const updateDeviceId = (index, deviceId) => {
-    console.log('updateDeviceId called:', { index, deviceId });
     setDataTypes(current =>
       current.map((type, i) =>
         i === index ? { ...type, deviceId } : type
@@ -67,10 +68,36 @@ export const useSensorCharts = () => {
     return { start, end };
   };
 
+  const updateYAxisRange = (index, type, value) => {
+    setDataTypes(current =>
+      current.map((dataType, i) =>
+        i === index
+          ? { ...dataType, [type]: value === '' ? null : Number(value) }
+          : dataType
+      )
+    );
+  };
+
+  const getDefaultYAxisRange = (data) => {
+    if (!data || data.length === 0) return { min: 0, max: 100 };
+    
+    const values = data.map(d => d.value);
+    const minValue = Math.min(...values);
+    const maxValue = Math.max(...values);
+    
+    const range = maxValue - minValue;
+    const padding = range * 0.1;
+    
+    return {
+      min: Math.floor(minValue - padding),
+      max: Math.ceil(maxValue + padding)
+    };
+  };
+
   useEffect(() => {
     const fetchData = async () => {
+
       try {
-        console.log('Fetching data with:', { dataTypes, dateRange });
         setIsLoading(true);
         setError(null);
         const { start, end } = getDateRange(dateRange);
@@ -82,12 +109,6 @@ export const useSensorCharts = () => {
           setSensorData([]);
           return;
         }
-
-        console.log('Making API call with:', { 
-          deviceId: activeType.deviceId, 
-          type: activeType.id, 
-          hours 
-        });
 
         const response = await sensorApi.getReadingsByDeviceAndType(
           activeType.deviceId,
@@ -109,9 +130,19 @@ export const useSensorCharts = () => {
           }))
           .sort((a, b) => a.createdAt - b.createdAt);
 
-        console.log('Sample transformed data point:', validData[0]);
-        console.log('Total valid data points:', validData.length);
-        
+        if (activeType.yMin === null || activeType.yMax === null) {
+          const { min, max } = getDefaultYAxisRange(validData);
+          setDataTypes(current =>
+            current.map((type, i) =>
+              i === 0 ? {
+                ...type,
+                yMin: type.yMin ?? min,
+                yMax: type.yMax ?? max
+              } : type
+            )
+          );
+        }
+
         setSensorData(validData);
       } catch (err) {
         setError(err.message);
@@ -134,6 +165,7 @@ export const useSensorCharts = () => {
     removeDataType,
     updateDataType,
     updateDeviceId,
+    updateYAxisRange,
     dateRange,
     setDateRange,
     getDateRange,

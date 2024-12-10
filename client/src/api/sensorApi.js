@@ -26,7 +26,6 @@ export const sensorApi = {
   },
 
   getReadingsByDeviceAndType: async (deviceId, type, hours = 24) => {
-    console.log('getReadingsByDeviceAndType', deviceId, type, hours);
     const response = await api.get(
       `/api/internal/sensor/readings/device/${deviceId}/type/${type}?hours=${hours}`
     );

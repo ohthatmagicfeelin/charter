@@ -53,7 +53,7 @@ export const internalSensorController = {
   getReadingsByDeviceAndType: catchAsync(async (req, res) => {
     const { deviceId, type } = req.params;
     const { hours = 24 } = req.query;
-    
+
     const data = await sensorService.getReadingsByDeviceAndType(
       deviceId, 
       type, 
