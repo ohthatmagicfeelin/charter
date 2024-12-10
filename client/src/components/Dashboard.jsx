@@ -1,6 +1,7 @@
 import React from 'react';
 import SensorChartDisplay from '@/components/sensor/SensorChartDisplay';
-import SensorChartControls from '@/components/sensor/SensorChartControls';
+import { DateRangeSelector } from '@/components/sensor/DateRangeSelector';
+import { DataTypeSelector } from '@/components/sensor/DataTypeSelector';
 import { useSensorCharts } from '@/hooks/useSensorCharts.js';
 import { prepareChartData, getChartOptions } from '@/utils/sensor/chartUtils';
 
@@ -51,13 +52,16 @@ const Dashboard = () => {
           <SensorChartDisplay options={options} data={chartData} isLoading={isLoading} />
         </div>
         
-        <SensorChartControls
-          tabs={tabs}
+        <DateRangeSelector
           dateRanges={dateRanges}
-          activeTab={activeTab}
           dateRange={dateRange}
-          onTabChange={setActiveTab}
           onDateRangeChange={setDateRange}
+        />
+        
+        <DataTypeSelector
+          tabs={tabs}
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
         />
       </div>
     </div>
