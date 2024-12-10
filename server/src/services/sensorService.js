@@ -54,5 +54,13 @@ export const sensorService = {
       if (error instanceof AppError) throw error;
       throw new AppError('Error saving batch sensor data', 500);
     }
+  },
+
+  getDeviceList: async () => {
+    try {
+      return await sensorRepository.getUniqueDevices();
+    } catch (error) {
+      throw new AppError('Error fetching device list', 500);
+    }
   }
 }; 

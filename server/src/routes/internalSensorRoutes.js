@@ -6,5 +6,6 @@ const router = express.Router();
 router.get('/readings', internalSensorController.getLatestReadings);
 router.get('/readings/device/:deviceId', internalSensorController.getDeviceReadings);
 router.get('/readings/type/:type', internalSensorController.getReadingsByType);
+router.get('/devices', internalSensorController.getDeviceList);
 
 export default router; 

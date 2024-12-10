@@ -74,6 +74,19 @@ export const sensorRepository = {
       })),
     });
   },
+
+  getUniqueDevices: async () => {
+    const devices = await prisma.sensorData.findMany({
+      distinct: ['deviceId'],
+      select: {
+        deviceId: true,
+      },
+      orderBy: {
+        deviceId: 'asc'
+      }
+    });
+    return devices.map(d => d.deviceId);
+  },
   
 
 };

@@ -38,5 +38,10 @@ export const internalSensorController = {
   getLatestValues: catchAsync(async (req, res) => {
     const data = await sensorService.getLatestValuesByType();
     res.json({ data });
+  }),
+
+  getDeviceList: catchAsync(async (req, res) => {
+    const devices = await sensorService.getDeviceList();
+    res.json({ data: devices });
   })
 }; 
