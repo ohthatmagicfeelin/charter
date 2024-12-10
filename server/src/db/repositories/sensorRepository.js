@@ -87,6 +87,19 @@ export const sensorRepository = {
     });
     return devices.map(d => d.deviceId);
   },
+
+  getUniqueTypes: async () => {
+    const types = await prisma.sensorData.findMany({
+      distinct: ['type'],
+      select: {
+        type: true,
+      },
+      orderBy: {
+        type: 'asc'
+      }
+    });
+    return types.map(t => t.type);
+  },
   
 
 };

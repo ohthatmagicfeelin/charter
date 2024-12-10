@@ -5,7 +5,6 @@ import { RemoveButton } from './RemoveButton';
 
 export const DataTypeCard = ({ 
   dataType, 
-  tabs, 
   index, 
   showRemove,
   onDeviceChange,
@@ -25,7 +24,6 @@ export const DataTypeCard = ({
           onChange={(e) => onDeviceChange(index, e.target.value)} 
         />
         <DataTypeButtons 
-          tabs={tabs} 
           activeId={dataType.id} 
           onTypeChange={(id) => onTypeChange(index, id)} 
         />

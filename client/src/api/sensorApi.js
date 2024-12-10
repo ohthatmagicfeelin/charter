@@ -18,5 +18,10 @@ export const sensorApi = {
   getDeviceList: async () => {
     const response = await api.get('/api/internal/sensor/devices');
     return response.data;
-  }
+  },
+
+  getTypeList: async () => {
+    const response = await api.get('/api/internal/sensor/types');
+    return response.data;
+  },
 }; 

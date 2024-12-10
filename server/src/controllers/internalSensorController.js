@@ -43,5 +43,10 @@ export const internalSensorController = {
   getDeviceList: catchAsync(async (req, res) => {
     const devices = await sensorService.getDeviceList();
     res.json({ data: devices });
+  }),
+
+  getTypeList: catchAsync(async (req, res) => {
+    const types = await sensorService.getTypeList();
+    res.json({ data: types });
   })
 }; 

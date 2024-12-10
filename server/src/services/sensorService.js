@@ -62,5 +62,13 @@ export const sensorService = {
     } catch (error) {
       throw new AppError('Error fetching device list', 500);
     }
+  },
+
+  getTypeList: async () => {
+    try {
+      return await sensorRepository.getUniqueTypes();
+    } catch (error) {
+      throw new AppError('Error fetching type list', 500);
+    }
   }
 }; 
