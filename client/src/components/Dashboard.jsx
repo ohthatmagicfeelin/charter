@@ -26,6 +26,7 @@ const Dashboard = () => {
     addDataType,
     removeDataType,
     updateDataType,
+    updateDeviceId,
     dateRange,
     setDateRange,
     getDateRange,
@@ -64,6 +65,9 @@ const Dashboard = () => {
   const chartData = prepareChartData(dataTypes[0].id, sensorData);
   const options = getChartOptions(dataTypes[0].id, dateRange, getDateRange);
 
+  // Add logging
+  console.log('Dashboard render:', { dataTypes, dateRange });
+
   return (
     <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 py-6 sm:py-12">
       <div className="text-center mb-8 sm:mb-16">
@@ -95,6 +99,7 @@ const Dashboard = () => {
           onAdd={addDataType}
           onRemove={removeDataType}
           onTypeChange={updateDataType}
+          onDeviceChange={updateDeviceId}
         />
       </div>
     </div>

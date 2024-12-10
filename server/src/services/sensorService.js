@@ -70,5 +70,13 @@ export const sensorService = {
     } catch (error) {
       throw new AppError('Error fetching type list', 500);
     }
+  },
+
+  getReadingsByDeviceAndType: async (deviceId, type, hours = 24) => {
+    try {
+      return await sensorRepository.getReadingsByDeviceAndType(deviceId, type, hours);
+    } catch (error) {
+      throw new AppError('Error fetching sensor data', 500);
+    }
   }
 }; 

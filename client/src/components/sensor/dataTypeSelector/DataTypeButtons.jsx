@@ -7,6 +7,12 @@ export const DataTypeButtons = ({ activeId, onTypeChange }) => {
     console.error('Error loading types:', error);
   }
 
+  const handleTypeChange = (typeId) => {
+    if (typeId !== activeId) {
+      onTypeChange(typeId);
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="col-span-9 flex justify-center gap-2">
@@ -22,7 +28,7 @@ export const DataTypeButtons = ({ activeId, onTypeChange }) => {
       {types.map((type) => (
         <button
           key={type.id}
-          onClick={() => onTypeChange(type.id)}
+          onClick={() => handleTypeChange(type.id)}
           className={`px-4 py-2 rounded-full text-sm font-medium
             transition-all duration-200 
             ${activeId === type.id

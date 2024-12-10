@@ -7,11 +7,18 @@ export const DeviceSelect = ({ deviceId, onChange }) => {
     console.error('Error loading devices:', error);
   }
 
+  const handleDeviceChange = (e) => {
+    const newDeviceId = e.target.value;
+    if (newDeviceId !== deviceId) {
+      onChange(e);
+    }
+  };
+
   return (
     <div className="col-span-3 relative">
       <select
         value={deviceId || ''}
-        onChange={onChange}
+        onChange={handleDeviceChange}
         disabled={isLoading}
         className="w-full px-4 py-3 rounded-full text-sm font-medium appearance-none
           bg-gray-50/80 dark:bg-gray-700/40 text-gray-700 dark:text-teal-100
@@ -24,19 +31,12 @@ export const DeviceSelect = ({ deviceId, onChange }) => {
           outline-none pr-10
           disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        {isLoading ? (
-          <option value="">Loading devices...</option>
-        ) : error ? (
-          <option value="">Error loading devices</option>
-        ) : devices.length === 0 ? (
-          <option value="">No devices found</option>
-        ) : (
-          devices.map(device => (
-            <option key={device.id} value={device.id}>
-              {device.label}
-            </option>
-          ))
-        )}
+        <option value="">Select Device</option>
+        {!isLoading && !error && devices.map(device => (
+          <option key={device.id} value={device.id}>
+            {device.label}
+          </option>
+        ))}
       </select>
       <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
         <svg

@@ -100,6 +100,23 @@ export const sensorRepository = {
     });
     return types.map(t => t.type);
   },
+
+  getReadingsByDeviceAndType: async (deviceId, type, hours = 24) => {
+    const now = new Date();
+    const startTime = new Date(now - hours * 60 * 60 * 1000);
+    
+    return prisma.sensorData.findMany({
+      where: {
+        deviceId,
+        type,
+        createdAt: {
+          gte: startTime,
+          lte: now
+        }
+      },
+      orderBy: { createdAt: 'asc' }
+    });
+  },
   
 
 };
