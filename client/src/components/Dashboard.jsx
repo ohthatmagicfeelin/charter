@@ -63,20 +63,31 @@ const Dashboard = () => {
     return () => cancelAnimationFrame(frame1);
   }, [dataTypes, sensorData, dateRange, isLoading]);
 
-  // Only prepare chart data if we have a selected type
-  const activeType = dataTypes[0];
-  const chartData = prepareChartData(
-    activeType?.id,  // Might be undefined initially
-    sensorData
-  );
-  
-  const options = getChartOptions(
-    activeType?.id, 
-    dateRange, 
-    getDateRange,
-    activeType?.yMin,
-    activeType?.yMax
-  );
+  // Only prepare chart data if we have selected types
+  const chartDataSets = dataTypes.map(type => {
+    console.log(`Preparing chart for type ${type.id}:`, {
+      data: sensorData[type.id],
+      yMin: type.yMin,
+      yMax: type.yMax
+    });
+    
+    return {
+      type,
+      data: prepareChartData(
+        type.id,
+        sensorData[type.id] || []
+      ),
+      options: getChartOptions(
+        type.id,
+        dateRange,
+        getDateRange,
+        type.yMin,
+        type.yMax
+      )
+    };
+  });
+
+  console.log('Final chart datasets:', chartDataSets);
 
   return (
     <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 py-6 sm:py-12">
@@ -90,12 +101,18 @@ const Dashboard = () => {
       </div>
 
       <div className="space-y-4 sm:space-y-6">
-        <div className="rounded-lg sm:rounded-2xl overflow-hidden bg-white dark:bg-gray-800 
-          shadow-[4px_4px_8px_rgba(0,0,0,0.1),_-4px_-4px_8px_rgba(255,255,255,0.9)]
-          dark:shadow-[4px_4px_8px_rgba(0,0,0,0.3),_-4px_-4px_8px_rgba(255,255,255,0.05)]"
-        >
-          <SensorChartDisplay options={options} data={chartData} isLoading={isLoading} />
-        </div>
+        {chartDataSets.map((chartSet, index) => (
+          <div key={index} className="rounded-lg sm:rounded-2xl overflow-hidden bg-white dark:bg-gray-800 
+            shadow-[4px_4px_8px_rgba(0,0,0,0.1),_-4px_-4px_8px_rgba(255,255,255,0.9)]
+            dark:shadow-[4px_4px_8px_rgba(0,0,0,0.3),_-4px_-4px_8px_rgba(255,255,255,0.05)]"
+          >
+            <SensorChartDisplay 
+              options={chartSet.options} 
+              data={chartSet.data} 
+              isLoading={isLoading} 
+            />
+          </div>
+        ))}
         
         <DateRangeSelector
           dateRanges={dateRanges}

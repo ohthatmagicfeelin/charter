@@ -59,15 +59,40 @@ const calculateMovingAverage = (data, windowSize = 5) => {
   }).filter(point => point.y !== null);
 };
 
+const getTypeTheme = (type) => {
+  return chartTheme[type] || chartTheme.default;
+};
+
+const formatTypeLabel = (type) => {
+  return type
+    ? type.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+    : 'Unknown Type';
+};
+
+const formatDateTime = (dateTime) => {
+  return toZonedTime(dateTime, 'UTC').toLocaleString('en-AU', {
+    hour: '2-digit',
+    minute: '2-digit', 
+    hour12: false,
+    timeZone: 'Australia/Sydney'
+  });
+};
+
 export const prepareChartData = (type, data) => {
-  if (!type || !data || data.length === 0) {
+  // Ensure data is an array
+  const safeData = Array.isArray(data) ? data : [];
+  
+  console.log('prepareChartData input:', { type, dataLength: safeData.length });
+  
+  if (!type || safeData.length === 0) {
+    console.log('Returning empty chart data for type:', type);
     return {
       labels: [],
       datasets: [{
-        label: 'No Data',
+        label: type ? formatTypeLabel(type) : 'No Data',
         data: [],
-        borderColor: chartTheme.default.line,
-        backgroundColor: chartTheme.default.gradient.start,
+        borderColor: getTypeTheme(type).line,
+        backgroundColor: getTypeTheme(type).gradient.start,
         fill: true,
         tension: 0.4,
         pointRadius: 2,
@@ -76,34 +101,26 @@ export const prepareChartData = (type, data) => {
     };
   }
 
-  const theme = chartTheme[type] || chartTheme.default;
-  const label = type
-    ? type.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
-    : 'Unknown Type';
-
-  return {
-    labels: data.map(d => toZonedTime(d.createdAt, 'UTC').toLocaleString('en-AU', {
-      hour: '2-digit',
-      minute: '2-digit', 
-      hour12: false,
-      timeZone: 'Australia/Sydney'
-    })),
-    datasets: [
-      {
-        label,
-        data: data.map(d => ({
-          x: toZonedTime(d.createdAt, 'UTC'),
-          y: d.value
-        })),
-        borderColor: theme.line,
-        backgroundColor: theme.gradient.start,
-        fill: true,
-        tension: 0.4,
-        pointRadius: 2,
-        pointHoverRadius: 5
-      }
-    ]
+  const theme = getTypeTheme(type);
+  const chartData = {
+    labels: safeData.map(d => formatDateTime(d.createdAt)),
+    datasets: [{
+      label: formatTypeLabel(type),
+      data: safeData.map(d => ({
+        x: toZonedTime(d.createdAt, 'UTC'),
+        y: d.value
+      })),
+      borderColor: theme.line,
+      backgroundColor: theme.gradient.start,
+      fill: true,
+      tension: 0.4,
+      pointRadius: 2,
+      pointHoverRadius: 5
+    }]
   };
+  
+  console.log('Prepared chart data:', chartData);
+  return chartData;
 };
 
 export const getChartOptions = (type, dateRange, getDateRange, yMin, yMax) => {

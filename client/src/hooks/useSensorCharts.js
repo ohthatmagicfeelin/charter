@@ -3,7 +3,7 @@ import { subHours, subDays, addDays } from 'date-fns';
 import { sensorApi } from '@/api/sensorApi';
 
 export const useSensorCharts = () => {
-  const [sensorData, setSensorData] = useState([]);
+  const [sensorData, setSensorData] = useState({});
   const [dataTypes, setDataTypes] = useState([{ 
     id: 'temperature',
     deviceId: 'esp32_001',
@@ -23,7 +23,7 @@ export const useSensorCharts = () => {
       active: true 
     }]);
   };
-
+  console.log(dataTypes);
   const removeDataType = (index) => {
     setDataTypes(current => current.filter((_, i) => i !== index));
   };
@@ -96,66 +96,54 @@ export const useSensorCharts = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-
       try {
         setIsLoading(true);
         setError(null);
-        const { start, end } = getDateRange(dateRange);
-        const hours = Math.ceil((end - start) / (1000 * 60 * 60));
-
-        const activeType = dataTypes[0];
-        if (!activeType.deviceId || !activeType.id) {
-          console.log('Skipping fetch - missing deviceId or type:', activeType);
-          setSensorData([]);
-          return;
-        }
-
-        const response = await sensorApi.getReadingsByDeviceAndType(
-          activeType.deviceId,
-          activeType.id,
-          hours
+        
+        const { hours } = getDateRange(dateRange);
+        console.log('Fetching data for types:', dataTypes);
+        
+        const results = await Promise.all(
+          dataTypes.map(async (type) => {
+            if (!type.id || !type.deviceId) return { typeId: type.id, data: [] };
+            
+            try {
+              console.log(`Fetching data for type ${type.id}, device ${type.deviceId}`);
+              const response = await sensorApi.getReadingsByDeviceAndType(
+                type.deviceId,
+                type.id,
+                hours
+              );
+              console.log(`Received data for ${type.id}:`, response);
+              const dataArray = response?.data || [];
+              return { typeId: type.id, data: dataArray };
+            } catch (err) {
+              console.error(`Error fetching data for type ${type.id}:`, err);
+              return { typeId: type.id, data: [] };
+            }
+          })
         );
-
-        const validData = response.data
-          .filter(reading => (
-            reading &&
-            typeof reading.value === 'number' &&
-            !isNaN(reading.value) &&
-            reading.createdAt
-          ))
-          .map(reading => ({
-            ...reading,
-            createdAt: new Date(reading.createdAt),
-            value: Number(reading.value)
-          }))
-          .sort((a, b) => a.createdAt - b.createdAt);
-
-        if (activeType.yMin === null || activeType.yMax === null) {
-          const { min, max } = getDefaultYAxisRange(validData);
-          setDataTypes(current =>
-            current.map((type, i) =>
-              i === 0 ? {
-                ...type,
-                yMin: type.yMin ?? min,
-                yMax: type.yMax ?? max
-              } : type
-            )
-          );
-        }
-
-        setSensorData(validData);
+        
+        const newData = results.reduce((acc, { typeId, data }) => {
+          acc[typeId] = Array.isArray(data) ? data : [];
+          return acc;
+        }, {});
+        
+        console.log('Setting sensor data:', newData);
+        setSensorData(newData);
       } catch (err) {
-        setError(err.message);
         console.error('Error fetching sensor data:', err);
+        setError(err);
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchData();
-    const interval = setInterval(fetchData, 60000);
-
-    return () => clearInterval(interval);
+    
+    const intervalId = setInterval(fetchData, 30000);
+    
+    return () => clearInterval(intervalId);
   }, [dataTypes, dateRange]);
 
   return {
