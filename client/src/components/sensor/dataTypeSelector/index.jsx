@@ -8,7 +8,8 @@ export const DataTypeSelector = ({
   onRemove, 
   onTypeChange, 
   onDeviceChange = () => {}, 
-  onRangeChange = () => {} 
+  onRangeChange = () => {},
+  onDisplayChange = () => {}
 }) => {
   return (
     <div className="space-y-4">
@@ -22,6 +23,7 @@ export const DataTypeSelector = ({
           onDeviceChange={onDeviceChange}
           onTypeChange={onTypeChange}
           onRangeChange={onRangeChange}
+          onDisplayChange={onDisplayChange}
           onRemove={onRemove}
         />
       ))}

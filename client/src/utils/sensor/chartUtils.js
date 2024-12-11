@@ -39,24 +39,19 @@ const chartTheme = {
   }
 };
 
-const calculateMovingAverage = (data, windowSize = 5) => {
-  return data.map((point, index, array) => {
-    const start = Math.max(0, index - Math.floor(windowSize / 2));
-    const end = Math.min(array.length, index + Math.floor(windowSize / 2) + 1);
-    const window = array.slice(start, end);
-    
-    const validValues = window
-      .map(p => parseFloat(p.y))
-      .filter(y => !isNaN(y));
-    
-    if (validValues.length === 0) return { x: point.x, y: null };
-    
-    const average = validValues.reduce((acc, curr) => acc + curr, 0) / validValues.length;
-    return {
-      x: point.x,
-      y: Number(average.toFixed(2))
-    };
-  }).filter(point => point.y !== null);
+const calculateMovingAverage = (data, window = 5) => {
+  const result = [];
+  for (let i = 0; i < data.length; i++) {
+    const start = Math.max(0, i - Math.floor(window / 2));
+    const end = Math.min(data.length, i + Math.floor(window / 2) + 1);
+    const values = data.slice(start, end).map(d => d.value);
+    const avg = values.reduce((a, b) => a + b, 0) / values.length;
+    result.push({
+      createdAt: data[i].createdAt,
+      value: avg
+    });
+  }
+  return result;
 };
 
 const getTypeTheme = (type) => {
@@ -78,14 +73,10 @@ const formatDateTime = (dateTime) => {
   });
 };
 
-export const prepareChartData = (type, data) => {
-  // Ensure data is an array
+export const prepareChartData = (type, data, displayType = 'raw') => {
   const safeData = Array.isArray(data) ? data : [];
   
-
-  
   if (!type || safeData.length === 0) {
-
     return {
       labels: [],
       datasets: [{
@@ -102,25 +93,51 @@ export const prepareChartData = (type, data) => {
   }
 
   const theme = getTypeTheme(type);
-  const chartData = {
-    labels: safeData.map(d => formatDateTime(d.createdAt)),
-    datasets: [{
-      label: formatTypeLabel(type),
+  const datasets = [];
+
+  // Add raw data FIRST (so it's underneath)
+  if (displayType === 'raw' || displayType === 'both') {
+    datasets.push({
+      label: `${formatTypeLabel(type)} (Raw)`,
       data: safeData.map(d => ({
         x: toZonedTime(d.createdAt, 'UTC'),
         y: d.value
       })),
       borderColor: theme.line,
       backgroundColor: theme.gradient.start,
-      fill: true,
+      fill: displayType === 'raw',
       tension: 0.4,
       pointRadius: 2,
-      pointHoverRadius: 5
-    }]
-  };
-  
+      pointHoverRadius: 5,
+      order: 1  // Lower order means drawn first
+    });
+  }
 
-  return chartData;
+  // Add smoothed data LAST (so it's on top)
+  if (displayType === 'smooth' || displayType === 'both') {
+    const smoothedData = calculateMovingAverage(safeData, 10);
+    datasets.push({
+      label: `${formatTypeLabel(type)} (Smoothed)`,
+      data: smoothedData.map(d => ({
+        x: toZonedTime(d.createdAt, 'UTC'),
+        y: d.value
+      })),
+      borderColor: '#FF6B6B',
+      backgroundColor: 'transparent',
+      fill: false,
+      tension: 0.4,
+      pointRadius: 0,
+      borderWidth: 3,
+      borderDash: [],
+      order: 0,  // Higher order means drawn last
+      zIndex: 2
+    });
+  }
+
+  return {
+    labels: safeData.map(d => formatDateTime(d.createdAt)),
+    datasets
+  };
 };
 
 export const getChartOptions = (type, dateRange, getDateRange, yMin, yMax) => {

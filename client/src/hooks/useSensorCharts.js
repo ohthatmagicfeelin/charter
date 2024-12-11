@@ -6,10 +6,10 @@ export const useSensorCharts = () => {
   const [sensorData, setSensorData] = useState({});
   const [dataTypes, setDataTypes] = useState([{ 
     id: 'temperature',
-    deviceId: 'esp32_001',
+    deviceId: 'esp32_002',
     yMin: null,
     yMax: null,
-    active: true 
+    display: 'raw'
   }]);
   const [dateRange, setDateRange] = useState('1d');
   const [isLoading, setIsLoading] = useState(true);
@@ -19,13 +19,13 @@ export const useSensorCharts = () => {
   const addDataType = () => {
     setDataTypes(current => [...current, { 
       id: 'temperature',
-      deviceId: 'esp32_001',
+      deviceId: 'esp32_002',
       yMin: null,
       yMax: null,
       active: true 
     }]);
   };
-  console.log(dataTypes);
+
   const removeDataType = (index) => {
     setDataTypes(current => current.filter((_, i) => i !== index));
   };
@@ -98,6 +98,15 @@ export const useSensorCharts = () => {
       min: Math.floor(minValue - padding),
       max: Math.ceil(maxValue + padding)
     };
+  };
+
+  const updateDisplayType = (index, display) => {
+
+    setDataTypes(current =>
+      current.map((dataType, i) =>
+        i === index ? { ...dataType, display } : dataType
+      )
+    );
   };
 
   useEffect(() => {
@@ -173,6 +182,7 @@ export const useSensorCharts = () => {
     updateDataType,
     updateDeviceId,
     updateYAxisRange,
+    updateDisplayType,
     dateRange,
     setDateRange,
     getDateRange,

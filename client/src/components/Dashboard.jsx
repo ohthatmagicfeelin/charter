@@ -28,11 +28,14 @@ const Dashboard = () => {
     updateDataType,
     updateDeviceId,
     updateYAxisRange,
+    updateDisplayType,
     dateRange,
     setDateRange,
     getDateRange,
     isLoading
   } = useSensorCharts();
+
+
 
   const scrollPositionRef = useRef(0);
   
@@ -64,28 +67,21 @@ const Dashboard = () => {
   }, [dataTypes, sensorData, dateRange, isLoading]);
 
   // Only prepare chart data if we have selected types
-  const chartDataSets = dataTypes.map(type => {
-    console.log(`Preparing chart for type ${type.id}:`, {
-      data: sensorData[type.id],
-      yMin: type.yMin,
-      yMax: type.yMax
-    });
-    
-    return {
-      type,
-      data: prepareChartData(
-        type.id,
-        sensorData[type.id] || []
-      ),
-      options: getChartOptions(
-        type.id,
-        dateRange,
-        getDateRange,
-        type.yMin,
-        type.yMax
-      )
-    };
-  });
+  const chartDataSets = dataTypes.map(type => ({
+    type,
+    data: prepareChartData(
+      type.id,
+      sensorData[type.id] || [],
+      type.display
+    ),
+    options: getChartOptions(
+      type.id,
+      dateRange,
+      getDateRange,
+      type.yMin,
+      type.yMax
+    )
+  }));
 
 
   return (
@@ -120,13 +116,13 @@ const Dashboard = () => {
         />
         
         <DataTypeSelector
-          tabs={tabs}
           dataTypes={dataTypes}
           onAdd={addDataType}
           onRemove={removeDataType}
           onTypeChange={updateDataType}
           onDeviceChange={updateDeviceId}
           onRangeChange={updateYAxisRange}
+          onDisplayChange={updateDisplayType}
         />
       </div>
     </div>
