@@ -9,8 +9,8 @@ import { ProtectedRoute } from '@/features/auth/components/ProtectedRoute';
 import { Settings } from '@/pages/Settings';
 import { MainLayout } from '@/layouts/MainLayout';
 import { useAuth } from '@/contexts/AuthContext';
+import { DashboardContainer } from '@/features/dashboard/components/DashboardContainer';
 
-const Dashboard = lazy(() => import('@/features/dashboard/components/Dashboard'));
 const NotFound = lazy(() => import('@/common/components/error/NotFound'));
 
 function AppRoutes() {
@@ -28,7 +28,7 @@ function AppRoutes() {
           {/* Root redirect */}
           <Route 
             path="/" 
-            element={<Dashboard />} 
+            element={<DashboardContainer />} 
           />
 
           {/* Public routes - redirect if authenticated */}
@@ -51,7 +51,7 @@ function AppRoutes() {
             path="/home"
             element={
               <ProtectedRoute>
-                <Dashboard />
+                <DashboardContainer />
               </ProtectedRoute>
             }
           />
