@@ -1,5 +1,5 @@
-import { catchAsync } from '../utils/catchAsync.js';
-import { AppError } from '../utils/AppError.js';
+import { catchAsync } from '../../../utils/catchAsync.js';
+import { AppError } from '../../../utils/AppError.js';
 import { sensorService } from '../services/sensorService.js';
 
 export const internalSensorController = {

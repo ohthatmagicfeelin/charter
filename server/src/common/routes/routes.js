@@ -7,8 +7,8 @@ import feedbackRoutes from '../../features/feedback/routes/feedbackRoutes.js';
 import { apiLimiter } from '../../middleware/rateLimiter.js';
 import settingsRoutes from '../../features/settings/routes/settingsRoutes.js';
 import sessionRoutes from './sessionRoutes.js';
-import externalSensorRoutes from '../../routes/externalSensorRoutes.js';
-import internalSensorRoutes from '../../routes/internalSensorRoutes.js';
+import externalSensorRoutes from '../../features/sensorData/routes/externalSensorRoutes.js';
+import internalSensorRoutes from '../../features/sensorData/routes/internalSensorRoutes.js';
 
 const router = express.Router();
 

@@ -1,5 +1,5 @@
-import { sensorRepository } from '../db/repositories/sensorRepository.js';
-import { AppError } from '../utils/AppError.js';
+import { sensorRepository } from '../repositories/sensorRepository.js';
+import { AppError } from '../../../utils/AppError.js';
 
 export const sensorService = {
   createReading: async (data) => {

@@ -1,6 +1,6 @@
 import express from 'express';
 import { externalSensorController } from '../controllers/externalSensorController.js';
-import { deviceAuth } from '../middleware/deviceAuth.js';
+import { deviceAuth } from '../../../middleware/deviceAuth.js';
 
 const router = express.Router();
 
