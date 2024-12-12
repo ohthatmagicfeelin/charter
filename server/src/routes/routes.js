@@ -1,9 +1,8 @@
 import express from 'express';
 import config from '../config/env.js';
 import deployRoutes from './deployRoutes.js';
-import apiRoutes from './apiRoutes.js';
 import paymentRoutes from './paymentRoutes.js';
-import authRoutes from './authRoutes.js';
+import authRoutes from '../features/auth/routes/authRoutes.js';
 import feedbackRoutes from './feedbackRoutes.js';
 import { apiLimiter } from '../middleware/rateLimiter.js';
 import settingsRoutes from './settingsRoutes.js';
@@ -22,7 +21,6 @@ router.use(`${basePath}/api/v1/sensor`, externalSensorRoutes);
 // Protected routes with session/CSRF
 router.use(`${basePath}/api/internal/sensor`, internalSensorRoutes);
 router.use(`${basePath}/api`, apiLimiter);
-router.use(`${basePath}/api`, apiRoutes);
 router.use(`${basePath}/api`, paymentRoutes)
 router.use(`${basePath}/api`, authRoutes)
 router.use(`/api/health`, deployRoutes);
