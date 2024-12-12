@@ -1,0 +1,86 @@
+import { useState, useCallback } from 'react';
+
+export const useDataTypes = () => {
+  const [dataTypes, setDataTypes] = useState([{ 
+    id: 'temperature',
+    deviceId: 'esp32_002',
+    yMin: null,
+    yMax: null,
+    display: 'raw'
+  }]);
+
+  const addDataType = () => {
+    setDataTypes(current => [...current, { 
+      id: 'temperature',
+      deviceId: 'esp32_002',
+      yMin: null,
+      yMax: null,
+      active: true 
+    }]);
+  };
+
+  const removeDataType = (index) => {
+    setDataTypes(current => current.filter((_, i) => i !== index));
+  };
+
+  const updateDataType = (index, newType) => {
+    setDataTypes(current =>
+      current.map((dataType, i) =>
+        i === index
+          ? { ...dataType, id: newType, yMin: null, yMax: null }
+          : dataType
+      )
+    );
+  };
+
+  const updateDeviceId = (index, deviceId) => {
+    setDataTypes(current =>
+      current.map((dataType, i) =>
+        i === index
+          ? { ...dataType, deviceId, yMin: null, yMax: null }
+          : dataType
+      )
+    );
+  };
+
+  const updateYAxisRange = (index, type, value) => {
+    setDataTypes(current =>
+      current.map((dataType, i) =>
+        i === index
+          ? { ...dataType, [type]: value === '' ? null : Number(value) }
+          : dataType
+      )
+    );
+  };
+
+  const updateAutoYAxisRange = useCallback((typeId, min, max) => {
+    setDataTypes(current =>
+      current.map(dataType =>
+        dataType.id === typeId ? {
+          ...dataType,
+          yMin: dataType.yMin === null ? min : dataType.yMin,
+          yMax: dataType.yMax === null ? max : dataType.yMax
+        } : dataType
+      )
+    );
+  }, []);
+
+  const updateDisplayType = (index, display) => {
+    setDataTypes(current =>
+      current.map((dataType, i) =>
+        i === index ? { ...dataType, display } : dataType
+      )
+    );
+  };
+
+  return {
+    dataTypes,
+    addDataType,
+    removeDataType,
+    updateDataType,
+    updateDeviceId,
+    updateYAxisRange,
+    updateAutoYAxisRange,
+    updateDisplayType
+  };
+}; 

@@ -73,6 +73,24 @@ const formatDateTime = (dateTime) => {
   });
 };
 
+export const getDefaultYAxisRange = (data) => {
+  if (!Array.isArray(data) || data.length === 0) {
+    return { min: 0, max: 100 };
+  }
+
+  const values = data.map(d => d.value);
+  const min = Math.min(...values);
+  const max = Math.max(...values);
+  
+  // Add 10% padding to the range
+  const padding = (max - min) * 0.1;
+  
+  return {
+    min: Math.floor(min - padding),
+    max: Math.ceil(max + padding)
+  };
+};
+
 export const prepareChartData = (type, data, displayType = 'raw') => {
   const safeData = Array.isArray(data) ? data : [];
   
