@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { prepareChartData, getChartOptions } from '@/features/dashboard/services/chartService';
+import { prepareChartData, getChartOptions } from '@/features/dashboard/services/chart/index';
 import { getDateRange } from '@/features/dashboard/services/dateService';
 
 export const useChartData = (dataTypes, sensorData, dateRange) => {

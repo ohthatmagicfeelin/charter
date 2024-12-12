@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { sensorApi } from '@/api/sensorApi';
 import { getDateRange } from '@/features/dashboard/services/dateService';
-import { getDefaultYAxisRange } from '@/features/dashboard/services/chartService';
+import { getDefaultYAxisRange } from '@/features/dashboard/services/chart/index';
 
 export const useSensorData = (dataTypes, dateRange, onYAxisRangeUpdate) => {
   const [sensorData, setSensorData] = useState({});
