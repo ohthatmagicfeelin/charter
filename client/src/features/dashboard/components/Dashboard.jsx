@@ -1,7 +1,7 @@
 import React, { useLayoutEffect, useRef } from 'react';
-import SensorChartDisplay from '@/features/dashboard/components/SensorChartDisplay';
-import { DateRangeSelector } from '@/features/dashboard/components/DateRangeSelector';
-import { DataTypeSelector } from '@/features/dashboard/components/dataTypeSelector';
+import SensorChartDisplay from '@/features/dashboard/components/chart/SensorChartDisplay';
+import { DateRangeSelector } from '@/features/dashboard/components/date/DateRangeSelector';
+import { DataTypeSelector } from '@/features/dashboard/components/dataSelector/DataTypeSelector';
 import { useSensorCharts } from '@/features/dashboard/hooks/useSensorCharts.js';
 import { prepareChartData, getChartOptions } from '@/features/dashboard/services/chartService';
 

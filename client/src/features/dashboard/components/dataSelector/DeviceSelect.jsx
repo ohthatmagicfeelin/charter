@@ -1,4 +1,4 @@
-import { useDeviceList } from '@/features/dashboard/hooks/useDeviceList';
+import { useDeviceList } from '@/features/dashboard/hooks/dataSelector/useDeviceList';
 
 export const DeviceSelect = ({ deviceId, onChange }) => {
   const { devices, isLoading, error } = useDeviceList();
