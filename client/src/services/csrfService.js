@@ -1,4 +1,4 @@
-import api from './api'; // Adjust the import path as necessary
+import api from '@/api/api.js'; // Adjust the import path as necessary
 let csrfToken = null;
 let csrfPromise = null;
 

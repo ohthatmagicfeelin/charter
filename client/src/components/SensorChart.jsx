@@ -10,7 +10,7 @@ import {
   Tooltip,
   Legend
 } from 'chart.js';
-import { useSensorData } from '@/hooks/useSensorData';
+import { useSensorData } from '@/features/auth/hooks/useSensorData';
 
 ChartJS.register(
   CategoryScale,

@@ -1,7 +1,7 @@
 // client/src/services/authService.js
 import axios from 'axios';
 import config from '@/config/env';
-import api from './api';
+import api from '@/api/api.js';
 
 class AuthService {
   constructor() {

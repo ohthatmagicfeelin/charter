@@ -1,4 +1,4 @@
-import api from '@/services/api';
+import api from '@/api/api.js';
 
 export const sensorApi = {
   getReadingsByType: async (type, hours = 24) => {

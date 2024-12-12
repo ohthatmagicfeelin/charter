@@ -1,5 +1,5 @@
-import { useLogin } from '@/hooks/useLogin';
-import { LoginFormDisplay } from '../forms';
+import { useLogin } from '@/features/auth/hooks/useLogin';
+import { LoginFormDisplay } from '@/features/auth/components/forms/LoginFormDisplay';
 
 export function LoginFormContainer() {
   const {

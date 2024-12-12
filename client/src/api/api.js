@@ -1,7 +1,7 @@
-// client/src/services/api.js
+// client/src/api/api.js
 import axios from 'axios';
 import config from '@/config/env'
-import fetchCsrfToken from './csrfService.js'; 
+import fetchCsrfToken from '@/services/csrfService.js'; 
 
 const api = axios.create({
   baseURL: config.BACKEND_URL,

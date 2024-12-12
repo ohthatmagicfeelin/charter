@@ -1,5 +1,5 @@
-import { useEmailVerification } from '@/hooks/useEmailVerification';
-import { EmailVerificationPendingDisplay } from '../verification/EmailVerificationPendingDisplay';
+import { useEmailVerification } from '@/features/auth/hooks/useEmailVerification';
+import { EmailVerificationPendingDisplay } from '@/features/auth/components/verification/EmailVerificationPendingDisplay';
 
 export function EmailVerificationPendingContainer() {
   const { email, resendStatus, handleResendVerification } = useEmailVerification();

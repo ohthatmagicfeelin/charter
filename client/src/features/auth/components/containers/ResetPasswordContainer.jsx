@@ -1,5 +1,5 @@
-import { useResetPassword } from '@/hooks/useResetPassword';
-import { ResetPasswordDisplay } from '../password/ResetPasswordDisplay';
+import { useResetPassword } from '@/features/auth/hooks/useResetPassword';
+import { ResetPasswordDisplay } from '@/features/auth/components/password/ResetPasswordDisplay';
 import { Link } from 'react-router-dom';
 
 export function ResetPasswordContainer() {
