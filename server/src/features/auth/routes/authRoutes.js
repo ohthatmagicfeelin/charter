@@ -13,7 +13,7 @@ import {
 import { sanitizeAuth } from '../../../middleware/sanitizeInput.js';
 import { csrfProtection } from '../../../middleware/csrf.js';
 import config from '../../../config/env.js';
-import * as csrfController from '../../../controllers/csrfController.js';
+import * as csrfController from '../controllers/csrfController.js';
 
 
 const router = express.Router();

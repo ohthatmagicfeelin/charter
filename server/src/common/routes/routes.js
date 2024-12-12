@@ -1,14 +1,14 @@
 import express from 'express';
-import config from '../config/env.js';
+import config from '../../config/env.js';
 import deployRoutes from './deployRoutes.js';
-import paymentRoutes from '../features/payment/routes/paymentRoutes.js';
-import authRoutes from '../features/auth/routes/authRoutes.js';
-import feedbackRoutes from '../features/feedback/routes/feedbackRoutes.js';
-import { apiLimiter } from '../middleware/rateLimiter.js';
-import settingsRoutes from './settingsRoutes.js';
+import paymentRoutes from '../../features/payment/routes/paymentRoutes.js';
+import authRoutes from '../../features/auth/routes/authRoutes.js';
+import feedbackRoutes from '../../features/feedback/routes/feedbackRoutes.js';
+import { apiLimiter } from '../../middleware/rateLimiter.js';
+import settingsRoutes from '../../features/settings/routes/settingsRoutes.js';
 import sessionRoutes from './sessionRoutes.js';
-import externalSensorRoutes from './externalSensorRoutes.js';
-import internalSensorRoutes from './internalSensorRoutes.js';
+import externalSensorRoutes from '../../routes/externalSensorRoutes.js';
+import internalSensorRoutes from '../../routes/internalSensorRoutes.js';
 
 const router = express.Router();
 
