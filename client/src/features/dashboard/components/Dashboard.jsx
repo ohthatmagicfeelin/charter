@@ -1,9 +1,9 @@
 import React, { useLayoutEffect, useRef } from 'react';
-import SensorChartDisplay from '@/components/sensor/SensorChartDisplay';
-import { DateRangeSelector } from '@/components/sensor/DateRangeSelector';
-import { DataTypeSelector } from '@/components/sensor/dataTypeSelector';
-import { useSensorCharts } from '@/hooks/useSensorCharts.js';
-import { prepareChartData, getChartOptions } from '@/utils/sensor/chartUtils';
+import SensorChartDisplay from '@/features/dashboard/components/SensorChartDisplay';
+import { DateRangeSelector } from '@/features/dashboard/components/DateRangeSelector';
+import { DataTypeSelector } from '@/features/dashboard/components/dataTypeSelector';
+import { useSensorCharts } from '@/features/dashboard/hooks/useSensorCharts.js';
+import { prepareChartData, getChartOptions } from '@/features/dashboard/services/chartService';
 
 const tabs = [
   { id: 'temperature', label: 'Temperature' },

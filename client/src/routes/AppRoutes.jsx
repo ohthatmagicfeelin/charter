@@ -10,7 +10,7 @@ import { Settings } from '@/pages/Settings';
 import { MainLayout } from '@/layouts/MainLayout';
 import { useAuth } from '@/contexts/AuthContext';
 
-const Dashboard = lazy(() => import('@/components/Dashboard'));
+const Dashboard = lazy(() => import('@/features/dashboard/components/Dashboard'));
 const NotFound = lazy(() => import('@/common/components/error/NotFound'));
 
 function AppRoutes() {

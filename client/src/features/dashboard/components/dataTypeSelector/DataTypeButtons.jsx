@@ -1,4 +1,4 @@
-import { useTypeList } from '@/hooks/useTypeList';
+import { useTypeList } from '@/features/dashboard/hooks/useTypeList';
 
 export const DataTypeButtons = ({ activeId, onTypeChange }) => {
   const { types, isLoading, error } = useTypeList();
