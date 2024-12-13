@@ -14,7 +14,13 @@ export const useSensorData = (dataTypes, dateRange, onYAxisRangeUpdate) => {
         setIsLoading(true);
         setError(null);
         
-        const { hours } = getDateRange(dateRange);
+        const hoursMap = {
+          '1d': 24,
+          '3d': 72,
+          '7d': 168,
+          '30d': 720
+        };
+        const hours = hoursMap[dateRange] || 24;
 
         const results = await Promise.all(
           dataTypes.map(async (type) => {
