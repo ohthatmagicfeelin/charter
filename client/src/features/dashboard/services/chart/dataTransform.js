@@ -49,8 +49,9 @@ export const prepareChartData = (dataTypes, allData) => {
         backgroundColor: 'transparent',
         fill: false,
         tension: 0.4,
-        pointRadius: 2,
-        pointHoverRadius: 5,
+        pointRadius: 0,
+        pointHoverRadius: 6,
+        borderWidth: 3,
         order: 1,
         yAxisID // Add yAxisID to the dataset
       });
@@ -71,6 +72,7 @@ export const prepareChartData = (dataTypes, allData) => {
         fill: false,
         tension: 0.4,
         pointRadius: 0,
+        pointHoverRadius: 6,
         borderWidth: 3,
         borderDash: [],
         order: 0,
