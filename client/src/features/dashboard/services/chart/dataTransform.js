@@ -17,67 +17,78 @@ const formatDateTime = (dateTime) => {
   });
 };
 
-export const prepareChartData = (type, data, displayType = 'raw') => {
-  const safeData = Array.isArray(data) ? data : [];
-  
-  if (!type || safeData.length === 0) {
+export const prepareChartData = (dataTypes, allData) => {
+  console.log('prepareChartData inputs:', { dataTypes, allData });
+
+  if (!dataTypes || dataTypes.length === 0) {
     return {
       labels: [],
-      datasets: [{
-        label: type ? formatTypeLabel(type) : 'No Data',
-        data: [],
-        borderColor: getTypeTheme(type).line,
-        backgroundColor: getTypeTheme(type).gradient.start,
-        fill: true,
-        tension: 0.4,
-        pointRadius: 2,
-        pointHoverRadius: 5
-      }]
+      datasets: []
     };
   }
 
-  const theme = getTypeTheme(type);
-  const datasets = [];
+  const datasets = dataTypes.flatMap((type, index) => {
+    const data = allData[type.id] || [];
+    const display = type.display || 'raw';
+    console.log(`Processing type ${type.id}:`, { data, display });
+    
+    const theme = getTypeTheme(type.id);
+    const datasets = [];
 
-  if (displayType === 'raw' || displayType === 'both') {
-    datasets.push({
-      label: `${formatTypeLabel(type)} (Raw)`,
-      data: safeData.map(d => ({
-        x: toZonedTime(d.createdAt, 'UTC'),
-        y: d.value
-      })),
-      borderColor: theme.line,
-      backgroundColor: theme.gradient.start,
-      fill: displayType === 'raw',
-      tension: 0.4,
-      pointRadius: 2,
-      pointHoverRadius: 5,
-      order: 1
-    });
-  }
+    // Use different y-axis for each data type
+    const yAxisID = `y${index}`;
 
-  if (displayType === 'smooth' || displayType === 'both') {
-    const smoothedData = calculateMovingAverage(safeData, 10);
-    datasets.push({
-      label: `${formatTypeLabel(type)} (Smoothed)`,
-      data: smoothedData.map(d => ({
-        x: toZonedTime(d.createdAt, 'UTC'),
-        y: d.value
-      })),
-      borderColor: '#FF6B6B',
-      backgroundColor: 'transparent',
-      fill: false,
-      tension: 0.4,
-      pointRadius: 0,
-      borderWidth: 3,
-      borderDash: [],
-      order: 0,
-      zIndex: 2
-    });
-  }
+    if (display === 'raw' || display === 'both') {
+      datasets.push({
+        label: `${formatTypeLabel(type.id)} (Raw)`,
+        data: data.map(d => ({
+          x: toZonedTime(d.createdAt, 'UTC'),
+          y: d.value
+        })),
+        borderColor: theme.line,
+        backgroundColor: 'transparent',
+        fill: false,
+        tension: 0.4,
+        pointRadius: 2,
+        pointHoverRadius: 5,
+        order: 1,
+        yAxisID // Add yAxisID to the dataset
+      });
+    }
 
-  return {
-    labels: safeData.map(d => formatDateTime(d.createdAt)),
+    if (display === 'smooth' || display === 'both') {
+      const smoothedData = calculateMovingAverage(data, 10);
+      datasets.push({
+        label: `${formatTypeLabel(type.id)} (Smoothed)`,
+        data: smoothedData.map(d => ({
+          x: toZonedTime(d.createdAt, 'UTC'),
+          y: d.value
+        })),
+        borderColor: `${theme.line}88`,
+        backgroundColor: 'transparent',
+        fill: false,
+        tension: 0.4,
+        pointRadius: 0,
+        borderWidth: 3,
+        borderDash: [],
+        order: 0,
+        yAxisID // Add yAxisID to the dataset
+      });
+    }
+
+    console.log(`Datasets for type ${type.id}:`, datasets);
+    return datasets;
+  });
+
+  const result = {
+    labels: [...new Set(
+      Object.values(allData)
+        .flat()
+        .map(d => formatDateTime(d.createdAt))
+    )].sort(),
     datasets
   };
+
+  console.log('Final chart data:', result);
+  return result;
 }; 

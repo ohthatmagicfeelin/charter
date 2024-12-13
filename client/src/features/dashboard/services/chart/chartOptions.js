@@ -1,4 +1,15 @@
-export const getChartOptions = (type, dateRange, getDateRange, yMin, yMax) => {
+const getAxisTitle = (typeId) => {
+  const titles = {
+    temperature: 'Temperature (°C)',
+    humidity: 'Humidity (%)',
+    pressure: 'Pressure (hPa)',
+    air_quality: 'Air Quality (PPM)',
+    default: 'Value'
+  };
+  return titles[typeId] || titles.default;
+};
+
+export const getChartOptions = (dataTypes, dateRange, getDateRange) => {
   const { start, end } = getDateRange(dateRange);
 
   let timeUnit = 'hour';
@@ -22,12 +33,34 @@ export const getChartOptions = (type, dateRange, getDateRange, yMin, yMax) => {
       maxTicksLimit = 12;
   }
 
+  // Create dynamic y-axes configuration based on data types
+  const yAxes = dataTypes.reduce((acc, typeId, index) => {
+    acc[`y${index}`] = {
+      type: 'linear',
+      display: true,
+      position: index === 0 ? 'left' : 'right',
+      grid: {
+        drawOnChartArea: index === 0 // only show grid for first axis
+      },
+      title: {
+        display: true,
+        text: getAxisTitle(typeId)
+      }
+    };
+    return acc;
+  }, {});
+
   return {
     responsive: true,
     maintainAspectRatio: false,
+    interaction: {
+      mode: 'index',
+      intersect: false,
+    },
     plugins: {
       legend: {
-        display: false
+        position: 'top',
+        display: true
       },
       tooltip: {
         mode: 'index',
@@ -48,14 +81,7 @@ export const getChartOptions = (type, dateRange, getDateRange, yMin, yMax) => {
         min: start,
         max: end
       },
-      y: {
-        beginAtZero: false,
-        grid: {
-          color: 'rgba(0, 0, 0, 0.1)'
-        },
-        min: yMin ?? 0,
-        max: yMax ?? 100
-      }
+      ...yAxes
     }
   };
 }; 

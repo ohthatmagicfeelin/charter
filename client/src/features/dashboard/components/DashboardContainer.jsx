@@ -24,6 +24,12 @@ export const DashboardContainer = () => {
     setDateRange,
   } = useDashboard();
 
+  console.log('DashboardContainer render:', {
+    chartDataSets,
+    dataTypes,
+    isLoading
+  });
+
   return (
     <DashboardDisplay
       chartDataSets={chartDataSets}

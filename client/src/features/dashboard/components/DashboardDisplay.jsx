@@ -29,18 +29,16 @@ export const DashboardDisplay = ({
       </div>
 
       <div className="space-y-4 sm:space-y-6">
-        {chartDataSets.map((chartSet, index) => (
-          <div key={index} className="rounded-lg sm:rounded-2xl overflow-hidden bg-white dark:bg-gray-800 
-            shadow-[4px_4px_8px_rgba(0,0,0,0.1),_-4px_-4px_8px_rgba(255,255,255,0.9)]
-            dark:shadow-[4px_4px_8px_rgba(0,0,0,0.3),_-4px_-4px_8px_rgba(255,255,255,0.05)]"
-          >
-            <SensorChartDisplay 
-              options={chartSet.options} 
-              data={chartSet.data} 
-              isLoading={isLoading} 
-            />
-          </div>
-        ))}
+        <div className="rounded-lg sm:rounded-2xl overflow-hidden bg-white dark:bg-gray-800 
+          shadow-[4px_4px_8px_rgba(0,0,0,0.1),_-4px_-4px_8px_rgba(255,255,255,0.9)]
+          dark:shadow-[4px_4px_8px_rgba(0,0,0,0.3),_-4px_-4px_8px_rgba(255,255,255,0.05)]"
+        >
+          <SensorChartDisplay 
+            options={chartDataSets[0].options} 
+            data={chartDataSets[0].data} 
+            isLoading={isLoading} 
+          />
+        </div>
         
         <DateRangeSelector
           dateRanges={dateRanges}

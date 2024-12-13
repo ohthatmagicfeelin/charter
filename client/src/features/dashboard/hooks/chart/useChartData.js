@@ -4,20 +4,15 @@ import { getDateRange } from '@/features/dashboard/services/dateService';
 
 export const useChartData = (dataTypes, sensorData, dateRange) => {
   return useMemo(() => {
-    return dataTypes.map(type => ({
-      type,
-      data: prepareChartData(
-        type.id,
-        sensorData[type.id] || [],
-        type.display
-      ),
+    return [{
+      data: prepareChartData(dataTypes, sensorData),
       options: getChartOptions(
-        type.id,
+        dataTypes.map(t => t.id),
         dateRange,
         getDateRange,
-        type.yMin,
-        type.yMax
+        null,
+        null
       )
-    }));
+    }];
   }, [dataTypes, sensorData, dateRange]);
 }; 

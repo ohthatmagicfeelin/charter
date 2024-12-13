@@ -25,6 +25,8 @@ ChartJS.register(
 );
 
 const SensorChartDisplay = ({ options, data, isLoading }) => {
+  console.log('SensorChartDisplay render:', { options, data, isLoading });
+  
   if (isLoading) {
     return <p className="text-center">Loading data...</p>;
   }
