@@ -57,10 +57,9 @@ export const prepareChartData = (dataTypes, allData) => {
     }
 
     if (display === 'smooth' || display === 'both') {
-      const smoothedData = calculateMovingAverage(data, 10);
       datasets.push({
         label: `${formatTypeLabel(type.id)} (Smoothed)`,
-        data: smoothedData.map(d => ({
+        data: calculateMovingAverage(data, 10).map(d => ({
           x: toZonedTime(d.createdAt, 'UTC'),
           y: d.value
         })),

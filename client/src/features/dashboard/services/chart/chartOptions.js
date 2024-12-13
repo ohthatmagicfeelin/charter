@@ -33,7 +33,6 @@ export const getChartOptions = (dataTypes, dateRange, getDateRange) => {
       maxTicksLimit = 12;
   }
 
-  // Create dynamic y-axes configuration based on data types
   const yAxes = dataTypes.reduce((acc, typeId, index) => {
     acc[`y${index}`] = {
       type: 'linear',
@@ -59,8 +58,7 @@ export const getChartOptions = (dataTypes, dateRange, getDateRange) => {
     },
     plugins: {
       legend: {
-        position: 'top',
-        display: true
+        display: false
       },
       tooltip: {
         mode: 'index',
