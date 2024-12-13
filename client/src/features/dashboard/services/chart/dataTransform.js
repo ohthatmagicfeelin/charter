@@ -57,13 +57,16 @@ export const prepareChartData = (dataTypes, allData) => {
     }
 
     if (display === 'smooth' || display === 'both') {
+      // Convert the RGB color to RGBA with 0.4 opacity
+      const smoothedColor = theme.line.replace('rgb', 'rgba').replace(')', ', 0.4)');
+      
       datasets.push({
         label: `${formatTypeLabel(type.id)} (Smoothed)`,
         data: calculateMovingAverage(data, 10).map(d => ({
           x: toZonedTime(d.createdAt, 'UTC'),
           y: d.value
         })),
-        borderColor: `${theme.line}88`,
+        borderColor: smoothedColor,
         backgroundColor: 'transparent',
         fill: false,
         tension: 0.4,
