@@ -33,9 +33,7 @@ export const SensorChartDisplay = memo(({ options, data, isLoading }) => {
   return (
     <div className="w-full h-[400px] p-4">
       <Line 
-        options={options} 
         data={data}
-        // Disable all animations
         options={{
           ...options,
           animation: false,
