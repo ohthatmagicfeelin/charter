@@ -107,5 +107,13 @@ export const sensorService = {
     } catch (error) {
       throw new AppError('Error fetching types for sensor and device', 500);
     }
+  },
+
+  getLastUpdateTime: async (deviceId, typeId) => {
+    try {
+      return await sensorRepository.getLastUpdateTime(deviceId, typeId);
+    } catch (error) {
+      throw new AppError('Error fetching last update time', 500);
+    }
   }
 }; 

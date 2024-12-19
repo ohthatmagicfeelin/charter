@@ -6,13 +6,28 @@ export const useChartData = (dataTypes, sensorData, dateRange) => {
   return useMemo(() => {
     return [{
       data: prepareChartData(dataTypes, sensorData),
-      options: getChartOptions(
-        dataTypes.map(t => t.id),
-        dateRange,
-        getDateRange,
-        null,
-        null
-      )
+      options: {
+        ...getChartOptions(
+          dataTypes.map(t => t.id),
+          dateRange,
+          getDateRange,
+          null,
+          null
+        ),
+        animation: false,
+        transitions: {
+          active: {
+            animation: {
+              duration: 0
+            }
+          }
+        },
+        responsiveAnimationDuration: 0
+      }
     }];
-  }, [dataTypes, sensorData, dateRange]);
+  }, [
+    JSON.stringify(dataTypes.map(t => ({ id: t.id, yMin: t.yMin, yMax: t.yMax }))),
+    JSON.stringify(sensorData),
+    dateRange
+  ]);
 }; 

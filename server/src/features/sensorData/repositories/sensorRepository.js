@@ -186,4 +186,20 @@ export const sensorRepository = {
     return types.map(t => t.type);
   },
 
+  getLastUpdateTime: async (deviceId, typeId) => {
+    const lastReading = await prisma.sensorData.findFirst({
+      where: {
+        deviceId,
+        type: typeId
+      },
+      orderBy: {
+        createdAt: 'desc'
+      },
+      select: {
+        createdAt: true
+      }
+    });
+    return lastReading?.createdAt || null;
+  },
+
 };

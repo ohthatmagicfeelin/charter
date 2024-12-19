@@ -84,5 +84,11 @@ export const internalSensorController = {
     console.log(sensor, deviceId);
     const types = await sensorService.getTypesBySensorAndDevice(sensor, deviceId);
     res.json({ data: types });
+  }),
+
+  getLastUpdateTime: catchAsync(async (req, res) => {
+    const { deviceId, typeId } = req.params;
+    const lastUpdate = await sensorService.getLastUpdateTime(deviceId, typeId);
+    res.json({ lastUpdate });
   })
 }; 

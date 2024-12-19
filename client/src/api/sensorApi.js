@@ -51,4 +51,9 @@ export const sensorApi = {
     const response = await api.get(`/api/internal/sensor/devices/${deviceId}/sensors/${sensor}/types`);
     return response.data;
   },
+
+  getLastUpdateTime: async (deviceId, typeId) => {
+    const response = await api.get(`/api/internal/sensor/last-update/${deviceId}/${typeId}`);
+    return response.data.lastUpdate;
+  }
 }; 

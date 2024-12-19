@@ -14,4 +14,6 @@ router.get('/devices/:deviceId/sensors', internalSensorController.getDeviceSenso
 router.get('/sensors/:sensor/types', internalSensorController.getTypesBySensor);
 router.get('/devices/:deviceId/sensors/:sensor/types', internalSensorController.getTypesBySensorAndDevice);
 
+router.get('/last-update/:deviceId/:typeId', internalSensorController.getLastUpdateTime);
+
 export default router; 
