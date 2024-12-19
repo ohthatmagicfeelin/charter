@@ -40,7 +40,7 @@ export const DataTypeCard = ({
       }}
     >
       <div className="p-5 sm:p-7">
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
             <ChevronButton isOpen={isOpen} onClick={() => setIsOpen(!isOpen)} />
             {isLoading ? (
@@ -57,7 +57,7 @@ export const DataTypeCard = ({
         </div>
 
         {isOpen && (
-          <div className="mt-4 space-y-4 sm:space-y-3">
+          <div className="mt-6 space-y-4 sm:space-y-3">
             <div className="sm:grid sm:grid-cols-[140px_1fr] sm:gap-6 sm:items-center pb-3 border-b border-gray-800">
               <Label>Device</Label>
               <div className="mt-2 sm:mt-0">
