@@ -7,8 +7,32 @@ export const useSensorData = (dataTypes, dateRange, onYAxisRangeUpdate) => {
   const [sensorData, setSensorData] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [lastUpdateTimes, setLastUpdateTimes] = useState({});
 
   useEffect(() => {
+    const checkForUpdates = async () => {
+      try {
+        const updates = await Promise.all(
+          dataTypes.map(async (type) => {
+            if (!type.id || !type.deviceId) return false;
+            
+            const lastUpdate = await sensorApi.getLastUpdateTime(
+              type.deviceId,
+              type.id
+            );
+            
+            const currentLastUpdate = lastUpdateTimes[`${type.deviceId}-${type.id}`];
+            return lastUpdate !== currentLastUpdate;
+          })
+        );
+
+        return updates.some(hasUpdate => hasUpdate);
+      } catch (err) {
+        console.error('Error checking for updates:', err);
+        return true; // Fetch on error to be safe
+      }
+    };
+
     const fetchData = async () => {
       try {
         setIsLoading(true);
@@ -35,16 +59,18 @@ export const useSensorData = (dataTypes, dateRange, onYAxisRangeUpdate) => {
 
               const data = response?.data || [];
               
-              // Calculate default range if not manually set
+              // Store last update time
+              setLastUpdateTimes(prev => ({
+                ...prev,
+                [`${type.deviceId}-${type.id}`]: response.lastUpdate
+              }));
+
               if (type.yMin === null || type.yMax === null) {
                 const { min, max } = getDefaultYAxisRange(data);
                 onYAxisRangeUpdate(type.id, min, max);
               }
 
-              return { 
-                typeId: type.id, 
-                data 
-              };
+              return { typeId: type.id, data };
             } catch (err) {
               console.error(`Error fetching data for type ${type.id}:`, err);
               return { typeId: type.id, data: [] };
@@ -66,8 +92,15 @@ export const useSensorData = (dataTypes, dateRange, onYAxisRangeUpdate) => {
       }
     };
 
-    fetchData();
-    const intervalId = setInterval(fetchData, 30000);
+    const pollForUpdates = async () => {
+      const hasUpdates = await checkForUpdates();
+      if (hasUpdates) {
+        await fetchData();
+      }
+    };
+
+    fetchData(); // Initial fetch
+    const intervalId = setInterval(pollForUpdates, 30000);
     
     return () => clearInterval(intervalId);
   }, [dataTypes, dateRange, onYAxisRangeUpdate]);
