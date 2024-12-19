@@ -75,5 +75,13 @@ export const sensorService = {
     } catch (error) {
       throw new AppError('Error fetching sensor data', 500);
     }
+  },
+
+  getUniqueSensors: async () => {
+    try {
+      return await sensorRepository.getUniqueSensors();
+    } catch (error) {
+      throw new AppError('Error fetching sensor list', 500);
+    }
   }
 }; 

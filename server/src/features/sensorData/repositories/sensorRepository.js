@@ -123,6 +123,18 @@ export const sensorRepository = {
     console.log(`Found ${results.length} records for device ${deviceId} and type ${type}`);
     return results;
   },
-  
+
+  getUniqueSensors: async () => {
+    const sensors = await prisma.sensorData.findMany({
+      distinct: ['sensor'],
+      select: {
+        sensor: true,
+      },
+      orderBy: {
+        sensor: 'asc'
+      }
+    });
+    return sensors.map(s => s.sensor);
+  },
 
 };

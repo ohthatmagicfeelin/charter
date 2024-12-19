@@ -22,6 +22,7 @@ export const DashboardContainer = () => {
     updateYAxisRange,
     updateDisplayType,
     setDateRange,
+    updateSensorType,
   } = useDashboard();
 
   console.log('DashboardContainer render:', {
@@ -44,6 +45,7 @@ export const DashboardContainer = () => {
       onDeviceChange={updateDeviceId}
       onRangeChange={updateYAxisRange}
       onDisplayChange={updateDisplayType}
+      onSensorChange={updateSensorType}
     />
   );
 }; 

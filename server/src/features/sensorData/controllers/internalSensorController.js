@@ -60,5 +60,10 @@ export const internalSensorController = {
       parseInt(hours)
     );
     res.json({ data });
+  }),
+
+  getSensorList: catchAsync(async (req, res) => {
+    const sensors = await sensorService.getUniqueSensors();
+    res.json({ data: sensors });
   })
 }; 

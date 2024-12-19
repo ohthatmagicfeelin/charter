@@ -31,4 +31,9 @@ export const sensorApi = {
     );
     return response.data;
   },
+
+  getSensorList: async () => {
+    const response = await api.get('/api/internal/sensor/sensors');
+    return response.data;
+  },
 }; 

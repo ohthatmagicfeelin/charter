@@ -1,17 +1,22 @@
 import { useTypeList } from '@/features/dashboard/hooks/dataSelector/useTypeList';
 
-export const DataTypeButtons = ({ activeId, onTypeChange }) => {
+export const DataTypeButtons = ({ activeId, sensorType, onTypeChange }) => {
   const { types, isLoading, error } = useTypeList();
+
+  const filteredTypes = types.filter(type => {
+    // Only show types that belong to the selected sensor
+    return type.id.startsWith(sensorType + '_');
+  });
 
   if (error) {
     console.error('Error loading types:', error);
   }
 
   return (
-    <div className="col-span-9 relative">
+    <div className="col-span-12 relative">
       <div className="overflow-x-auto pb-2 hide-scrollbar">
         <div className="flex gap-2 min-w-min">
-          {types.map((type) => (
+          {filteredTypes.map((type) => (
             <button
               key={type.id}
               onClick={() => onTypeChange(type.id)}
@@ -31,8 +36,6 @@ export const DataTypeButtons = ({ activeId, onTypeChange }) => {
           ))}
         </div>
       </div>
-      <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-white dark:from-gray-800 to-transparent pointer-events-none" />
-      <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-white dark:from-gray-800 to-transparent pointer-events-none" />
     </div>
   );
 }; 

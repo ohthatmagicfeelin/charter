@@ -9,5 +9,6 @@ router.get('/readings/type/:type', internalSensorController.getReadingsByType);
 router.get('/devices', internalSensorController.getDeviceList);
 router.get('/types', internalSensorController.getTypeList);
 router.get('/readings/device/:deviceId/type/:type', internalSensorController.getReadingsByDeviceAndType);
+router.get('/sensors', internalSensorController.getSensorList);
 
 export default router; 

@@ -5,6 +5,7 @@ export const DataTypeSelector = ({
   dataTypes, 
   onAdd, 
   onRemove, 
+  onSensorChange,
   onTypeChange, 
   onDeviceChange,
   onRangeChange,
@@ -22,6 +23,7 @@ export const DataTypeSelector = ({
             index={index}
             showRemove={dataTypes.length > 1}
             onDeviceChange={onDeviceChange}
+            onSensorChange={onSensorChange}
             onTypeChange={onTypeChange}
             onRangeChange={onRangeChange}
             onDisplayChange={onDisplayChange}

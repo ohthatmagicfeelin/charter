@@ -12,6 +12,7 @@ export const DashboardDisplay = ({
   onDateRangeChange,
   onAddDataType,
   onRemoveDataType,
+  onSensorChange,
   onTypeChange,
   onDeviceChange,
   onRangeChange,
@@ -50,6 +51,7 @@ export const DashboardDisplay = ({
           dataTypes={dataTypes}
           onAdd={onAddDataType}
           onRemove={onRemoveDataType}
+          onSensorChange={onSensorChange}
           onTypeChange={onTypeChange}
           onDeviceChange={onDeviceChange}
           onRangeChange={onRangeChange}

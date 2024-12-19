@@ -4,6 +4,7 @@ export const useDataTypes = () => {
   const [dataTypes, setDataTypes] = useState([{ 
     id: 'temperature',
     deviceId: 'esp32_002',
+    sensor: 'bme680',
     yMin: null,
     yMax: null,
     display: 'raw'
@@ -13,14 +14,25 @@ export const useDataTypes = () => {
     setDataTypes(current => [...current, { 
       id: 'temperature',
       deviceId: 'esp32_002',
+      sensor: 'bme680',
       yMin: null,
       yMax: null,
-      active: true 
+      display: 'raw'
     }]);
   };
 
   const removeDataType = (index) => {
     setDataTypes(current => current.filter((_, i) => i !== index));
+  };
+
+  const updateSensorType = (index, sensor) => {
+    setDataTypes(current =>
+      current.map((dataType, i) =>
+        i === index
+          ? { ...dataType, sensor, id: null, yMin: null, yMax: null }
+          : dataType
+      )
+    );
   };
 
   const updateDataType = (index, newType) => {
@@ -77,6 +89,7 @@ export const useDataTypes = () => {
     dataTypes,
     addDataType,
     removeDataType,
+    updateSensorType,
     updateDataType,
     updateDeviceId,
     updateYAxisRange,
