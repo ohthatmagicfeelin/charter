@@ -45,10 +45,12 @@ export const DashboardDisplay = ({
           dateRanges={dateRanges}
           dateRange={dateRange}
           onDateRangeChange={onDateRangeChange}
+          isLoading={isLoading}
         />
         
         <DataTypeSelector
           dataTypes={dataTypes}
+          isLoading={isLoading}
           onAdd={onAddDataType}
           onRemove={onRemoveDataType}
           onSensorChange={onSensorChange}

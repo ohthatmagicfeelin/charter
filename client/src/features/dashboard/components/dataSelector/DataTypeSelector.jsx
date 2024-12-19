@@ -3,6 +3,7 @@ import { AddButton } from './AddButton';
 
 export const DataTypeSelector = ({     
   dataTypes, 
+  isLoading,
   onAdd, 
   onRemove, 
   onSensorChange,
@@ -28,6 +29,7 @@ export const DataTypeSelector = ({
             onRangeChange={onRangeChange}
             onDisplayChange={onDisplayChange}
             onRemove={onRemove}
+            isLoading={isLoading}
           />
         );
       })}

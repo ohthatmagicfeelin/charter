@@ -9,6 +9,9 @@ import { SensorTypeButtons } from './SensorTypeButtons';
 import { DataTypeTitle } from './DataTypeTitle';
 import { ChevronButton } from './ChevronButton';
 import { Label } from './Label';
+import { ButtonSkeleton } from './skeletons/ButtonSkeleton';
+import { SelectSkeleton } from './skeletons/SelectSkeleton';
+import { Skeleton } from '../common/Skeleton';
 
 export const DataTypeCard = ({ 
   dataType, 
@@ -19,7 +22,8 @@ export const DataTypeCard = ({
   onTypeChange,
   onRangeChange,
   onDisplayChange,
-  onRemove 
+  onRemove,
+  isLoading = false
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const theme = getTypeTheme(dataType.id);
@@ -39,11 +43,15 @@ export const DataTypeCard = ({
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center space-x-4">
             <ChevronButton isOpen={isOpen} onClick={() => setIsOpen(!isOpen)} />
-            <DataTypeTitle 
-              deviceId={dataType.deviceId}
-              sensor={dataType.sensor}
-              dataType={dataType.id}
-            />
+            {isLoading ? (
+              <Skeleton className="h-5 w-48" />
+            ) : (
+              <DataTypeTitle 
+                deviceId={dataType.deviceId}
+                sensor={dataType.sensor}
+                dataType={dataType.id}
+              />
+            )}
           </div>
           {showRemove && <RemoveButton onClick={() => onRemove(index)} />}
         </div>
@@ -51,60 +59,81 @@ export const DataTypeCard = ({
         {isOpen && (
           <div className="mt-4 space-y-4 sm:space-y-3">
             <div className="sm:grid sm:grid-cols-[140px_1fr] sm:gap-6 sm:items-center pb-3 border-b border-gray-800">
-              <Label className="sm:col-span-2">Device</Label>
-              <div className="mt-2 sm:mt-0 sm:col-span-10">
-                <DeviceSelect 
-                  deviceId={dataType.deviceId} 
-                  onChange={(e) => onDeviceChange(index, e.target.value)} 
-                />
+              <Label>Device</Label>
+              <div className="mt-2 sm:mt-0">
+                {isLoading ? (
+                  <SelectSkeleton />
+                ) : (
+                  <DeviceSelect 
+                    deviceId={dataType.deviceId} 
+                    onChange={(e) => onDeviceChange(index, e.target.value)} 
+                  />
+                )}
               </div>
             </div>
             
             <div className="sm:grid sm:grid-cols-[140px_1fr] sm:gap-6 sm:items-center pb-3 border-b border-gray-800">
-              <Label className="sm:col-span-2">Sensor</Label>
-              <div className="mt-2 sm:mt-0 sm:col-span-10">
-                <SensorTypeButtons
-                  deviceId={dataType.deviceId}
-                  activeSensor={dataType.sensor}
-                  onSensorChange={(sensor) => onSensorChange(index, sensor)}
-                />
+              <Label>Sensor</Label>
+              <div className="mt-2 sm:mt-0">
+                {isLoading ? (
+                  <ButtonSkeleton count={3} />
+                ) : (
+                  <SensorTypeButtons
+                    deviceId={dataType.deviceId}
+                    activeSensor={dataType.sensor}
+                    onSensorChange={(sensor) => onSensorChange(index, sensor)}
+                  />
+                )}
               </div>
             </div>
             
-            {dataType.sensor && (
+            {(dataType.sensor || isLoading) && (
               <div className="sm:grid sm:grid-cols-[140px_1fr] sm:gap-6 sm:items-center pb-3 border-b border-gray-800">
-                <Label className="sm:col-span-2">Data Type</Label>
-                <div className="mt-2 sm:mt-0 sm:col-span-10">
-                  <DataTypeButtons 
-                    activeId={dataType.id}
-                    deviceId={dataType.deviceId}
-                    sensorType={dataType.sensor}
-                    onTypeChange={(id) => onTypeChange(index, id)} 
-                  />
+                <Label>Data Type</Label>
+                <div className="mt-2 sm:mt-0">
+                  {isLoading ? (
+                    <ButtonSkeleton count={4} />
+                  ) : (
+                    <DataTypeButtons 
+                      activeId={dataType.id}
+                      deviceId={dataType.deviceId}
+                      sensorType={dataType.sensor}
+                      onTypeChange={(id) => onTypeChange(index, id)} 
+                    />
+                  )}
                 </div>
               </div>
             )}
 
             <div className="sm:grid sm:grid-cols-[140px_1fr] sm:gap-6 sm:items-center pb-3 border-b border-gray-800">
-              <Label className="sm:col-span-2">Display</Label>
-              <div className="mt-2 sm:mt-0 sm:col-span-10">
-                <DataDisplayToggle 
-                  display={dataType.display} 
-                  onDisplayChange={(display) => {
-                    onDisplayChange(index, display);
-                  }}
-                />
+              <Label>Display</Label>
+              <div className="mt-2 sm:mt-0">
+                {isLoading ? (
+                  <ButtonSkeleton count={3} />
+                ) : (
+                  <DataDisplayToggle 
+                    display={dataType.display} 
+                    onDisplayChange={(display) => onDisplayChange(index, display)}
+                  />
+                )}
               </div>
             </div>
 
             <div className="sm:grid sm:grid-cols-[140px_1fr] sm:gap-6 sm:items-center pb-3 border-b border-gray-800">
-              <Label className="sm:col-span-2">Y-Axis Range</Label>
-              <div className="mt-2 sm:mt-0 sm:col-span-10">
-                <YAxisRange 
-                  min={dataType.yMin}
-                  max={dataType.yMax}
-                  onRangeChange={(type, value) => onRangeChange(index, type, value)}
-                />
+              <Label>Y-Axis Range</Label>
+              <div className="mt-2 sm:mt-0">
+                {isLoading ? (
+                  <div className="grid grid-cols-2 gap-4">
+                    <SelectSkeleton />
+                    <SelectSkeleton />
+                  </div>
+                ) : (
+                  <YAxisRange 
+                    min={dataType.yMin}
+                    max={dataType.yMax}
+                    onRangeChange={(type, value) => onRangeChange(index, type, value)}
+                  />
+                )}
               </div>
             </div>
           </div>

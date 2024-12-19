@@ -1,4 +1,10 @@
-export const DateRangeSelector = ({ dateRanges, dateRange, onDateRangeChange }) => {
+import { DateRangeSkeleton } from './DateRangeSkeleton';
+
+export const DateRangeSelector = ({ dateRanges, dateRange, onDateRangeChange, isLoading }) => {
+  if (isLoading) {
+    return <DateRangeSkeleton />;
+  }
+
   return (
     <div className="mt-4 sm:mt-6 rounded-lg sm:rounded-2xl overflow-hidden bg-white dark:bg-gray-800
       shadow-[4px_4px_8px_rgba(0,0,0,0.1),_-4px_-4px_8px_rgba(255,255,255,0.9)]
