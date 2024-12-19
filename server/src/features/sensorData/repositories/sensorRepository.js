@@ -61,6 +61,7 @@ export const sensorRepository = {
       data: readings.map(reading => ({
         type: reading.type,
         value: parseFloat(reading.value),
+        sensor: reading.sensor,
         deviceId: reading.deviceId,
         createdAt: reading.timestamp || new Date()
       })),

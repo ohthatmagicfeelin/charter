@@ -30,19 +30,16 @@ export const externalSensorController = {
 
   createBatchReadings: catchAsync(async (req, res) => {
     const readings = req.body;
-    console.log(readings);
-    // Convert object with numeric keys to array
     const readingsArray = Object.values(readings);
     
-    // Validate readings exist
     if (!readingsArray.length) {
       throw new AppError('No readings provided', 400);
     }
 
-    // Process each reading to ensure values are numbers
     const processedReadings = readingsArray.map(reading => ({
       value: parseFloat(reading.value),
       type: reading.type,
+      sensor: reading.sensor,
       deviceId: reading.deviceId,
       timestamp: reading.timestamp ? new Date(reading.timestamp) : undefined
     }));
