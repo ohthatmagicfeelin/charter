@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { DeviceSelect } from './DeviceSelect';
 import { DataTypeButtons } from './DataTypeButtons';
 import { YAxisRange } from './YAxisRange';
@@ -6,6 +7,7 @@ import { RemoveButton } from './RemoveButton';
 import { getTypeTheme } from '@/features/dashboard/services/chart/chartTheme';
 import { SensorTypeButtons } from './SensorTypeButtons';
 import { DataTypeTitle } from './DataTypeTitle';
+import { ChevronButton } from './ChevronButton';
 
 export const DataTypeCard = ({ 
   dataType, 
@@ -18,6 +20,7 @@ export const DataTypeCard = ({
   onDisplayChange,
   onRemove 
 }) => {
+  const [isOpen, setIsOpen] = useState(false);
   const theme = getTypeTheme(dataType.id);
 
   return (
@@ -28,46 +31,55 @@ export const DataTypeCard = ({
         borderLeft: `4px solid ${theme.line}`
       }}
     >
-      <div className="p-4 sm:p-6 space-y-4">
-        <DataTypeTitle 
-          deviceId={dataType.deviceId}
-          sensor={dataType.sensor}
-          dataType={dataType.id}
-        />
-        
-        <DeviceSelect 
-          deviceId={dataType.deviceId} 
-          onChange={(e) => onDeviceChange(index, e.target.value)} 
-        />
-        
-        <SensorTypeButtons
-          deviceId={dataType.deviceId}
-          activeSensor={dataType.sensor}
-          onSensorChange={(sensor) => onSensorChange(index, sensor)}
-        />
-        
-        {dataType.sensor && (
-          <DataTypeButtons 
-            activeId={dataType.id}
-            deviceId={dataType.deviceId}
-            sensorType={dataType.sensor}
-            onTypeChange={(id) => onTypeChange(index, id)} 
-          />
-        )}
-
-        <div className="space-y-4">
-          <DataDisplayToggle 
-            display={dataType.display} 
-            onDisplayChange={(display) => {
-              onDisplayChange(index, display);
-            }}
-          />
-          <YAxisRange 
-            min={dataType.yMin}
-            max={dataType.yMax}
-            onRangeChange={(type, value) => onRangeChange(index, type, value)}
-          />
+      <div className="p-4 sm:p-6">
+        <div className="flex items-center space-x-3">
+          <ChevronButton isOpen={isOpen} onClick={() => setIsOpen(!isOpen)} />
+          <div className="flex-grow">
+            <DataTypeTitle 
+              deviceId={dataType.deviceId}
+              sensor={dataType.sensor}
+              dataType={dataType.id}
+            />
+          </div>
         </div>
+
+        {isOpen && (
+          <div className="mt-4 space-y-4">
+            <DeviceSelect 
+              deviceId={dataType.deviceId} 
+              onChange={(e) => onDeviceChange(index, e.target.value)} 
+            />
+            
+            <SensorTypeButtons
+              deviceId={dataType.deviceId}
+              activeSensor={dataType.sensor}
+              onSensorChange={(sensor) => onSensorChange(index, sensor)}
+            />
+            
+            {dataType.sensor && (
+              <DataTypeButtons 
+                activeId={dataType.id}
+                deviceId={dataType.deviceId}
+                sensorType={dataType.sensor}
+                onTypeChange={(id) => onTypeChange(index, id)} 
+              />
+            )}
+
+            <div className="space-y-4">
+              <DataDisplayToggle 
+                display={dataType.display} 
+                onDisplayChange={(display) => {
+                  onDisplayChange(index, display);
+                }}
+              />
+              <YAxisRange 
+                min={dataType.yMin}
+                max={dataType.yMax}
+                onRangeChange={(type, value) => onRangeChange(index, type, value)}
+              />
+            </div>
+          </div>
+        )}
       </div>
 
       {showRemove && (
