@@ -1,22 +1,26 @@
-import { useTypeList } from '@/features/dashboard/hooks/dataSelector/useTypeList';
+import { useSensorTypes } from '@/features/dashboard/hooks/dataSelector/useSensorTypes';
 
-export const DataTypeButtons = ({ activeId, sensorType, onTypeChange }) => {
-  const { types, isLoading, error } = useTypeList();
+export const DataTypeButtons = ({ activeId, deviceId, sensorType, onTypeChange }) => {
+  const { types, isLoading, error } = useSensorTypes(deviceId, sensorType);
 
-  const filteredTypes = types.filter(type => {
-    // Only show types that belong to the selected sensor
-    return type.id.startsWith(sensorType + '_');
-  });
+  if (isLoading) {
+    return <div className="text-sm text-gray-500">Loading types...</div>;
+  }
 
   if (error) {
     console.error('Error loading types:', error);
+    return <div className="text-sm text-red-500">Error loading types</div>;
+  }
+
+  if (types.length === 0) {
+    return <div className="text-sm text-gray-500">No data types available for this sensor</div>;
   }
 
   return (
     <div className="col-span-12 relative">
       <div className="overflow-x-auto pb-2 hide-scrollbar">
         <div className="flex gap-2 min-w-min">
-          {filteredTypes.map((type) => (
+          {types.map((type) => (
             <button
               key={type.id}
               onClick={() => onTypeChange(type.id)}

@@ -25,11 +25,6 @@ export const DashboardContainer = () => {
     updateSensorType,
   } = useDashboard();
 
-  console.log('DashboardContainer render:', {
-    chartDataSets,
-    dataTypes,
-    isLoading
-  });
 
   return (
     <DashboardDisplay

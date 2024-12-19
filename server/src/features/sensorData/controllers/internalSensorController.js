@@ -65,5 +65,24 @@ export const internalSensorController = {
   getSensorList: catchAsync(async (req, res) => {
     const sensors = await sensorService.getUniqueSensors();
     res.json({ data: sensors });
+  }),
+
+  getDeviceSensors: catchAsync(async (req, res) => {
+    const { deviceId } = req.params;
+    const sensors = await sensorService.getSensorsByDevice(deviceId);
+    res.json({ data: sensors });
+  }),
+
+  getTypesBySensor: catchAsync(async (req, res) => {
+    const { sensor } = req.params;
+    const types = await sensorService.getTypesBySensor(sensor);
+    res.json({ data: types });
+  }),
+
+  getTypesBySensorAndDevice: catchAsync(async (req, res) => {
+    const { sensor, deviceId } = req.params;
+    console.log(sensor, deviceId);
+    const types = await sensorService.getTypesBySensorAndDevice(sensor, deviceId);
+    res.json({ data: types });
   })
 }; 

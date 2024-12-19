@@ -18,7 +18,6 @@ const formatDateTime = (dateTime) => {
 };
 
 export const prepareChartData = (dataTypes, allData) => {
-  console.log('prepareChartData inputs:', { dataTypes, allData });
 
   if (!dataTypes || dataTypes.length === 0) {
     return {
@@ -30,7 +29,6 @@ export const prepareChartData = (dataTypes, allData) => {
   const datasets = dataTypes.flatMap((type, index) => {
     const data = allData[type.id] || [];
     const display = type.display || 'raw';
-    console.log(`Processing type ${type.id}:`, { data, display });
     
     const theme = getTypeTheme(type.id);
     const datasets = [];
@@ -80,7 +78,6 @@ export const prepareChartData = (dataTypes, allData) => {
       });
     }
 
-    console.log(`Datasets for type ${type.id}:`, datasets);
     return datasets;
   });
 
@@ -93,6 +90,5 @@ export const prepareChartData = (dataTypes, allData) => {
     datasets
   };
 
-  console.log('Final chart data:', result);
   return result;
 }; 

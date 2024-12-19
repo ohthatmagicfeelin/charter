@@ -1,10 +1,19 @@
-import { useSensorList } from '@/features/dashboard/hooks/dataSelector/useSensorList';
+import { useDeviceSensors } from '@/features/dashboard/hooks/dataSelector/useDeviceSensors';
 
-export const SensorTypeButtons = ({ activeSensor, onSensorChange }) => {
-  const { sensors, isLoading, error } = useSensorList();
+export const SensorTypeButtons = ({ deviceId, activeSensor, onSensorChange }) => {
+  const { sensors, isLoading, error } = useDeviceSensors(deviceId);
+
+  if (isLoading) {
+    return <div className="text-sm text-gray-500">Loading sensors...</div>;
+  }
 
   if (error) {
     console.error('Error loading sensors:', error);
+    return <div className="text-sm text-red-500">Error loading sensors</div>;
+  }
+
+  if (sensors.length === 0) {
+    return <div className="text-sm text-gray-500">No sensors available for this device</div>;
   }
 
   return (

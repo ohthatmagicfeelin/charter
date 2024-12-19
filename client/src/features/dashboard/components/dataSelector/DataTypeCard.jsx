@@ -18,7 +18,7 @@ export const DataTypeCard = ({
   onRemove 
 }) => {
   const theme = getTypeTheme(dataType.id);
-  console.log(dataType);
+
   return (
     <div className="relative rounded-lg sm:rounded-2xl overflow-hidden bg-white dark:bg-gray-800
       shadow-[4px_4px_8px_rgba(0,0,0,0.1),_-4px_-4px_8px_rgba(255,255,255,0.9)]
@@ -34,6 +34,7 @@ export const DataTypeCard = ({
         />
         
         <SensorTypeButtons
+          deviceId={dataType.deviceId}
           activeSensor={dataType.sensor}
           onSensorChange={(sensor) => onSensorChange(index, sensor)}
         />
@@ -41,6 +42,7 @@ export const DataTypeCard = ({
         {dataType.sensor && (
           <DataTypeButtons 
             activeId={dataType.id}
+            deviceId={dataType.deviceId}
             sensorType={dataType.sensor}
             onTypeChange={(id) => onTypeChange(index, id)} 
           />

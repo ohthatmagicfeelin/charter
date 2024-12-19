@@ -83,5 +83,29 @@ export const sensorService = {
     } catch (error) {
       throw new AppError('Error fetching sensor list', 500);
     }
+  },
+
+  getSensorsByDevice: async (deviceId) => {
+    try {
+      return await sensorRepository.getSensorsByDevice(deviceId);
+    } catch (error) {
+      throw new AppError('Error fetching device sensors', 500);
+    }
+  },
+
+  getTypesBySensor: async (sensor) => {
+    try {
+      return await sensorRepository.getTypesBySensor(sensor);
+    } catch (error) {
+      throw new AppError('Error fetching types for sensor', 500);
+    }
+  },
+
+  getTypesBySensorAndDevice: async (sensor, deviceId) => {
+    try {
+      return await sensorRepository.getTypesBySensorAndDevice(sensor, deviceId);
+    } catch (error) {
+      throw new AppError('Error fetching types for sensor and device', 500);
+    }
   }
 }; 
