@@ -5,6 +5,7 @@ import { DataDisplayToggle } from './DataDisplayToggle';
 import { RemoveButton } from './RemoveButton';
 import { getTypeTheme } from '@/features/dashboard/services/chart/chartTheme';
 import { SensorTypeButtons } from './SensorTypeButtons';
+import { DataTypeTitle } from './DataTypeTitle';
 
 export const DataTypeCard = ({ 
   dataType, 
@@ -28,6 +29,12 @@ export const DataTypeCard = ({
       }}
     >
       <div className="p-4 sm:p-6 space-y-4">
+        <DataTypeTitle 
+          deviceId={dataType.deviceId}
+          sensor={dataType.sensor}
+          dataType={dataType.id}
+        />
+        
         <DeviceSelect 
           deviceId={dataType.deviceId} 
           onChange={(e) => onDeviceChange(index, e.target.value)} 
