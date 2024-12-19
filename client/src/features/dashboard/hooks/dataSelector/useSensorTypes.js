@@ -17,7 +17,7 @@ export const useSensorTypes = (deviceId, sensor) => {
       try {
         setIsLoading(true);
         const response = await sensorApi.getTypesBySensorAndDevice(deviceId, sensor);
-        console.log("response", response);
+
         const typeList = response.data.map(type => ({
           id: type,
           label: type
