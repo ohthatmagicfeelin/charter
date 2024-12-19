@@ -32,15 +32,22 @@ export const DataTypeCard = ({
       }}
     >
       <div className="p-4 sm:p-6">
-        <div className="flex items-center space-x-3">
-          <ChevronButton isOpen={isOpen} onClick={() => setIsOpen(!isOpen)} />
-          <div className="flex-grow">
-            <DataTypeTitle 
-              deviceId={dataType.deviceId}
-              sensor={dataType.sensor}
-              dataType={dataType.id}
-            />
+        <div className="flex items-center">
+          <div className="flex items-center space-x-3 flex-grow">
+            <ChevronButton isOpen={isOpen} onClick={() => setIsOpen(!isOpen)} />
+            <div className="flex-grow">
+              <DataTypeTitle 
+                deviceId={dataType.deviceId}
+                sensor={dataType.sensor}
+                dataType={dataType.id}
+              />
+            </div>
           </div>
+          {showRemove && (
+            <div className="flex items-center">
+              <RemoveButton onClick={() => onRemove(index)} />
+            </div>
+          )}
         </div>
 
         {isOpen && (
@@ -81,10 +88,6 @@ export const DataTypeCard = ({
           </div>
         )}
       </div>
-
-      {showRemove && (
-        <RemoveButton onClick={() => onRemove(index)} />
-      )}
     </div>
   );
 }; 
