@@ -70,7 +70,11 @@ export const useSensorData = (dataTypes, dateRange, onYAxisRangeUpdate) => {
                 onYAxisRangeUpdate(type.id, min, max);
               }
 
-              return { typeId: type.id, data };
+              return { 
+                typeId: type.id, 
+                deviceId: type.deviceId, 
+                data 
+              };
             } catch (err) {
               console.error(`Error fetching data for type ${type.id}:`, err);
               return { typeId: type.id, data: [] };
@@ -78,8 +82,9 @@ export const useSensorData = (dataTypes, dateRange, onYAxisRangeUpdate) => {
           })
         );
         
-        const newData = results.reduce((acc, { typeId, data }) => {
-          acc[typeId] = Array.isArray(data) ? data : [];
+        const newData = results.reduce((acc, { typeId, data, deviceId }) => {
+          const compositeKey = `${deviceId}_${typeId}`;
+          acc[compositeKey] = Array.isArray(data) ? data : [];
           return acc;
         }, {});
 

@@ -13,7 +13,7 @@ export const useDeviceSensors = (deviceId) => {
         setIsLoading(false);
         return;
       }
-      console.log("deviceId", deviceId);
+
       try {
         setIsLoading(true);
         const response = await sensorApi.getSensorsByDevice(deviceId);
