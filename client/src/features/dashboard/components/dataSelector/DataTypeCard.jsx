@@ -12,6 +12,8 @@ import { Label } from './Label';
 import { ButtonSkeleton } from './skeletons/ButtonSkeleton';
 import { SelectSkeleton } from './skeletons/SelectSkeleton';
 import { Skeleton } from '../common/Skeleton';
+import { useDeviceList } from '../../hooks/dataSelector/useDeviceList';
+import { useSensorTypes } from '../../hooks/dataSelector/useSensorTypes';
 
 export const DataTypeCard = ({ 
   dataType, 
@@ -22,11 +24,14 @@ export const DataTypeCard = ({
   onTypeChange,
   onRangeChange,
   onDisplayChange,
-  onRemove,
-  isLoading = false
+  onRemove
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const theme = getTypeTheme(dataType.id);
+  const { devices, isLoading: isLoadingDevices } = useDeviceList();
+  const { types, isLoading: isLoadingTypes } = useSensorTypes(dataType.deviceId, dataType.sensor);
+  
+  const isLoading = isLoadingDevices || isLoadingTypes;
 
   return (
     <div className="relative rounded-lg sm:rounded-2xl overflow-hidden bg-white dark:bg-gray-800

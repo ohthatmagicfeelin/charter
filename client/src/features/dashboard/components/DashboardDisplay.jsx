@@ -1,6 +1,6 @@
 import React from 'react';
 import SensorChartDisplay from '@/features/dashboard/components/chart/SensorChartDisplay';
-import { DateRangeSelector } from '@/features/dashboard/components/date/DateRangeSelector';
+import { DateRangeSelector } from '@/features/dashboard/components/date/DateRangeSelector.jsx';
 import { DataTypeSelector } from '@/features/dashboard/components/dataSelector/DataTypeSelector';
 
 export const DashboardDisplay = ({

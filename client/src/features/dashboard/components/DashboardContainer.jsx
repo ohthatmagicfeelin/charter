@@ -1,46 +1,27 @@
-import React from 'react';
+import { DashboardProvider } from '../contexts/DashboardProvider';
 import { DashboardDisplay } from './DashboardDisplay';
-import { useDashboard } from '@/features/dashboard/hooks/useDashboard';
-
-const dateRanges = [
-  { id: '1d', label: '1 Day' },
-  { id: '3d', label: '3 Days' },
-  { id: '7d', label: '7 Days' },
-  { id: '30d', label: '30 Days' }
-];
+import { ChartContainer } from './chart/ChartContainer';
+import { DateRangeSelectorContainer } from './date/DateRangeSelectorContainer';
+import { DataTypeSelectorContainer } from './dataSelector/DataTypeSelectorContainer';
 
 export const DashboardContainer = () => {
-  const {
-    chartDataSets,
-    dateRange,
-    dataTypes,
-    isLoading,
-    addDataType,
-    removeDataType,
-    updateDataType,
-    updateDeviceId,
-    updateYAxisRange,
-    updateDisplayType,
-    setDateRange,
-    updateSensorType,
-  } = useDashboard();
-
-
   return (
-    <DashboardDisplay
-      chartDataSets={chartDataSets}
-      dateRanges={dateRanges}
-      dateRange={dateRange}
-      dataTypes={dataTypes}
-      isLoading={isLoading}
-      onDateRangeChange={setDateRange}
-      onAddDataType={addDataType}
-      onRemoveDataType={removeDataType}
-      onTypeChange={updateDataType}
-      onDeviceChange={updateDeviceId}
-      onRangeChange={updateYAxisRange}
-      onDisplayChange={updateDisplayType}
-      onSensorChange={updateSensorType}
-    />
+    <DashboardProvider>
+      <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 py-6 sm:py-12">
+        <div className="text-center mb-8 sm:mb-16">
+          <h1 className="text-4xl sm:text-5xl font-bold text-gray-800 dark:text-teal-50 mb-4 sm:mb-6">
+            ESP32 Sensor Dashboard
+          </h1>
+          <p className="text-lg sm:text-xl text-gray-600 dark:text-teal-200/70 mb-4 sm:mb-8">
+            Real-time environmental monitoring data
+          </p>
+        </div>
+        <div className="space-y-4 sm:space-y-6">
+          <ChartContainer />
+          <DateRangeSelectorContainer />
+          <DataTypeSelectorContainer />
+        </div>
+      </div>
+    </DashboardProvider>
   );
 }; 
