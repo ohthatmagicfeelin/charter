@@ -1,4 +1,5 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
+import { chartConfigService } from '../../services/chartConfigService';
 
 export const useDataTypes = () => {
   const [dataTypes, setDataTypes] = useState([{ 
@@ -10,6 +11,27 @@ export const useDataTypes = () => {
     display: 'raw',
     color: null
   }]);
+
+  // Load saved configuration on mount
+  useEffect(() => {
+    const loadSavedConfig = async () => {
+      const savedConfig = await chartConfigService.loadConfig();
+      if (savedConfig) {
+        setDataTypes(savedConfig);
+      }
+    };
+
+    loadSavedConfig();
+  }, []);
+
+  // Save configuration whenever it changes
+  useEffect(() => {
+    const saveConfig = async () => {
+      await chartConfigService.saveConfig(dataTypes);
+    };
+
+    saveConfig();
+  }, [dataTypes]);
 
   const addDataType = () => {
     setDataTypes(current => [...current, { 
