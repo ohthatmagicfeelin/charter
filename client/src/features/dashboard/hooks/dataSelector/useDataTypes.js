@@ -3,27 +3,29 @@ import { chartConfigService } from '../../services/chartConfigService';
 
 export const useDataTypes = () => {
   const [dataTypes, setDataTypes] = useState([]);
+  const [isInitialized, setIsInitialized] = useState(false);
 
   // Load saved configuration on mount
   useEffect(() => {
     const loadSavedConfig = async () => {
       const savedConfig = await chartConfigService.loadConfig();
-      if (savedConfig) {
-        setDataTypes(savedConfig);
-      }
+      setDataTypes(savedConfig);
+      setIsInitialized(true);
     };
 
     loadSavedConfig();
   }, []);
 
-  // Save configuration whenever it changes
+  // Save configuration whenever it changes, but only after initial load
   useEffect(() => {
+    if (!isInitialized) return;
+    
     const saveConfig = async () => {
       await chartConfigService.saveConfig(dataTypes);
     };
 
     saveConfig();
-  }, [dataTypes]);
+  }, [dataTypes, isInitialized]);
 
   const addDataType = () => {
     setDataTypes(current => [...current, { 
