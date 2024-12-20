@@ -3,7 +3,7 @@ import { useState, useCallback } from 'react';
 export const useDataTypes = () => {
   const [dataTypes, setDataTypes] = useState([{ 
     id: 'temperature',
-    deviceId: 'esp32_002',
+    deviceId: 'Kitchen',
     sensor: 'bme680',
     yMin: null,
     yMax: null,
@@ -13,8 +13,8 @@ export const useDataTypes = () => {
   const addDataType = () => {
     setDataTypes(current => [...current, { 
       id: 'temperature',
-      deviceId: 'esp32_002',
-      sensor: 'bme680',
+      deviceId: 'DiningRoom',
+      sensor: 'soil_moisture',
       yMin: null,
       yMax: null,
       display: 'raw'
