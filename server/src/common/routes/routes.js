@@ -9,6 +9,7 @@ import settingsRoutes from '../../features/settings/routes/settingsRoutes.js';
 import sessionRoutes from './sessionRoutes.js';
 import externalSensorRoutes from '../../features/sensorData/routes/externalSensorRoutes.js';
 import internalSensorRoutes from '../../features/sensorData/routes/internalSensorRoutes.js';
+import chartConfigRoutes from '../../features/chartConfig/routes/chartConfigRoutes.js';
 
 const router = express.Router();
 
@@ -27,5 +28,6 @@ router.use(`/api/health`, deployRoutes);
 router.use(`${basePath}/api/feedback`, feedbackRoutes);
 router.use(`${basePath}/api/settings`, settingsRoutes);
 router.use(`${basePath}/api/sessions`, sessionRoutes);
+router.use(`${basePath}/api/chart-config`, chartConfigRoutes);
 
 export default router;

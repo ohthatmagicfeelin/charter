@@ -1,15 +1,38 @@
-import api from '@/api/api.js';
+import { chartConfigApi } from '@/api/chartConfig';
+
+const DEFAULT_CONFIG = [{
+  id: 'temperature',
+  deviceId: 'Kitchen',
+  sensor: 'bme680',
+  yMin: null,
+  yMax: null,
+  display: 'raw',
+  color: null
+}];
 
 export const chartConfigService = {
   saveConfig: async (config) => {
-    // For now, just log the configuration
-    console.log('Saving chart configuration:', config);
-    return { success: true };
+    try {
+      const response = await chartConfigApi.saveConfig(config);
+      console.log('Chart configuration saved:', response);
+      return response;
+    } catch (error) {
+      console.error('Error saving chart configuration:', error);
+      return { success: false };
+    }
   },
 
   loadConfig: async () => {
-    // For now, return null to indicate no saved config
-    console.log('Loading chart configuration');
-    return null;
+    try {
+      const response = await chartConfigApi.getConfig();
+      console.log('Chart configuration loaded:', response);
+      if (!response?.config || !Array.isArray(response.config)) {
+        return DEFAULT_CONFIG;
+      }
+      return response.config;
+    } catch (error) {
+      console.error('Error loading chart configuration:', error);
+      return DEFAULT_CONFIG;
+    }
   }
 }; 

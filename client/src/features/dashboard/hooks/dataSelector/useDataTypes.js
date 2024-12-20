@@ -2,15 +2,7 @@ import { useState, useCallback, useEffect } from 'react';
 import { chartConfigService } from '../../services/chartConfigService';
 
 export const useDataTypes = () => {
-  const [dataTypes, setDataTypes] = useState([{ 
-    id: 'temperature',
-    deviceId: 'Kitchen',
-    sensor: 'bme680',
-    yMin: null,
-    yMax: null,
-    display: 'raw',
-    color: null
-  }]);
+  const [dataTypes, setDataTypes] = useState([]);
 
   // Load saved configuration on mount
   useEffect(() => {

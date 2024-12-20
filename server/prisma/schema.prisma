@@ -27,6 +27,7 @@ model User {
   settings         UserSettings?
   emailVerificationTokens EmailVerificationToken[]
   sessions         Session[]
+  chartConfigs     ChartConfig[]
 
   @@map("users")
 }
@@ -148,4 +149,15 @@ model SensorData {
   @@index([type])
   @@index([sensor])
   @@index([createdAt])
+}
+
+model ChartConfig {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @unique @map("user_id")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  config    Json
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("chart_configs")
 }

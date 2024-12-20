@@ -8,7 +8,7 @@ export const requireAuth = async (req, res, next) => {
   const userId = req.session.userId;
   const path = req.path;
 
-  console.log('Auth Check:', { sessionId, userId, path });
+  // console.log('Auth Check:', { sessionId, userId, path });
 
   if (!req.session.userId) {
     await auditService.log({
