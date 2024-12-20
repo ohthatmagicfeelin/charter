@@ -26,7 +26,12 @@ export const useChartData = (dataTypes, sensorData, dateRange) => {
       }
     }];
   }, [
-    JSON.stringify(dataTypes.map(t => ({ id: t.id, yMin: t.yMin, yMax: t.yMax }))),
+    JSON.stringify(dataTypes.map(t => ({ 
+      id: t.id, 
+      yMin: t.yMin, 
+      yMax: t.yMax,
+      color: t.color 
+    }))),
     JSON.stringify(sensorData),
     dateRange
   ]);

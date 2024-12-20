@@ -7,7 +7,8 @@ export const useDataTypes = () => {
     sensor: 'bme680',
     yMin: null,
     yMax: null,
-    display: 'raw'
+    display: 'raw',
+    color: null
   }]);
 
   const addDataType = () => {
@@ -17,7 +18,8 @@ export const useDataTypes = () => {
       sensor: 'soil_moisture',
       yMin: null,
       yMax: null,
-      display: 'raw'
+      display: 'raw',
+      color: null
     }]);
   };
 
@@ -85,6 +87,14 @@ export const useDataTypes = () => {
     );
   };
 
+  const updateChartColor = (index, color) => {
+    setDataTypes(current =>
+      current.map((dataType, i) =>
+        i === index ? { ...dataType, color } : dataType
+      )
+    );
+  };
+
   return {
     dataTypes,
     addDataType,
@@ -94,6 +104,7 @@ export const useDataTypes = () => {
     updateDeviceId,
     updateYAxisRange,
     updateAutoYAxisRange,
-    updateDisplayType
+    updateDisplayType,
+    updateChartColor
   };
 }; 

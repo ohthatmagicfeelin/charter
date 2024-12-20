@@ -14,6 +14,7 @@ import { SelectSkeleton } from './skeletons/SelectSkeleton';
 import { Skeleton } from '../common/Skeleton';
 import { useDeviceList } from '../../hooks/dataSelector/useDeviceList';
 import { useSensorTypes } from '../../hooks/dataSelector/useSensorTypes';
+import { ColorPicker } from './controls/ColorPicker';
 
 export const DataTypeCard = ({ 
   dataType, 
@@ -24,14 +25,17 @@ export const DataTypeCard = ({
   onTypeChange,
   onRangeChange,
   onDisplayChange,
-  onRemove
+  onColorChange,
+  onRemove,
+  isLoading: isLoadingProp
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const theme = getTypeTheme(dataType.id);
+
   const { devices, isLoading: isLoadingDevices } = useDeviceList();
   const { types, isLoading: isLoadingTypes } = useSensorTypes(dataType.deviceId, dataType.sensor);
   
-  const isLoading = isLoadingDevices || isLoadingTypes;
+  const isLoading = isLoadingProp || isLoadingDevices || isLoadingTypes;
 
   return (
     <div className="relative rounded-lg sm:rounded-2xl overflow-hidden bg-white dark:bg-gray-800
@@ -41,7 +45,7 @@ export const DataTypeCard = ({
       dark:hover:shadow-[4px_4px_12px_rgba(0,0,0,0.5)]
       transition-shadow duration-200"
       style={{
-        borderLeft: `4px solid ${theme.line}`
+        borderLeft: `4px solid ${dataType.color || theme.line}`
       }}
     >
       <div className="p-5 sm:p-7">
@@ -137,6 +141,21 @@ export const DataTypeCard = ({
                     min={dataType.yMin}
                     max={dataType.yMax}
                     onRangeChange={(type, value) => onRangeChange(index, type, value)}
+                  />
+                )}
+              </div>
+            </div>
+
+            <div className="sm:grid sm:grid-cols-[140px_1fr] sm:gap-6 sm:items-center pb-3 border-b border-gray-800">
+              <Label>Chart Color</Label>
+              <div className="mt-2 sm:mt-0">
+                {isLoading ? (
+                  <SelectSkeleton />
+                ) : (
+                  <ColorPicker 
+                    color={dataType.color}
+                    defaultColor={theme.line}
+                    onChange={(color) => onColorChange(index, color)}
                   />
                 )}
               </div>

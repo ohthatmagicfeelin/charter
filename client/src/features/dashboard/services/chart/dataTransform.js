@@ -31,6 +31,7 @@ export const prepareChartData = (dataTypes, allData) => {
     const display = type.display || 'raw';
     
     const theme = getTypeTheme(type.id);
+    const lineColor = type.color || theme.line;
     const datasets = [];
 
     const yAxisID = `y${index}`;
@@ -42,7 +43,7 @@ export const prepareChartData = (dataTypes, allData) => {
           x: toZonedTime(d.createdAt, 'UTC'),
           y: d.value
         })),
-        borderColor: theme.line,
+        borderColor: lineColor,
         backgroundColor: 'transparent',
         fill: false,
         tension: 0.4,
@@ -55,7 +56,7 @@ export const prepareChartData = (dataTypes, allData) => {
     }
 
     if (display === 'smooth' || display === 'both') {
-      const smoothedColor = theme.line.replace('rgb', 'rgba').replace(')', ', 0.4)');
+      const smoothedColor = lineColor.replace('rgb', 'rgba').replace(')', ', 0.4)');
       
       datasets.push({
         label: `${type.deviceId} - ${formatTypeLabel(type.id)} (Smoothed)`,

@@ -10,7 +10,8 @@ export const DataTypeSelectorContainer = () => {
     updateDataType,
     updateDeviceId,
     updateYAxisRange,
-    updateDisplayType
+    updateDisplayType,
+    updateChartColor
   } = useDataTypesContext();
 
   return (
@@ -23,6 +24,7 @@ export const DataTypeSelectorContainer = () => {
       onDeviceChange={updateDeviceId}
       onRangeChange={updateYAxisRange}
       onDisplayChange={updateDisplayType}
+      onColorChange={updateChartColor}
     />
   );
 }; 
