@@ -135,6 +135,8 @@ export function AuthProvider({ children }) {
         await authService.logout();
         localStorage.removeItem('auth_initialized');
         dispatch({ type: 'LOGOUT' });
+        // Reset CSRF token after logout
+        await import('@/common/services/csrfService').then(module => module.resetCsrfToken());
       } catch (error) {
         dispatch({ type: 'LOGOUT' });
         throw error;

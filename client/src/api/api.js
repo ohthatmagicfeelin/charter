@@ -28,15 +28,30 @@ api.interceptors.request.use(async config => {
 
 api.interceptors.response.use(
     response => response,
-    error => {
-      if (config.NODE_ENV === 'development' || config.DEBUG) {
-        console.error('Request error:', {
-            status: error.response?.status,
-            data: error.response?.data,
-            headers: error.response?.headers
-        });
+    async error => {
+        const originalRequest = error.config;
+        
+        // Handle CSRF token errors
+        if (error.response?.status === 403 && error.response?.data?.code === 'INVALID_CSRF' && !originalRequest._retry) {
+            originalRequest._retry = true;
+            
+            // Reset and fetch new CSRF token
+            await import('@/common/services/csrfService').then(module => module.resetCsrfToken());
+            const newToken = await import('@/common/services/csrfService').then(module => module.default());
+            
+            // Update the request with new token
+            originalRequest.headers['X-CSRF-Token'] = newToken;
+            return api(originalRequest);
+        }
+
+        if (config.NODE_ENV === 'development' || config.DEBUG) {
+            console.error('Request error:', {
+                status: error.response?.status,
+                data: error.response?.data,
+                headers: error.response?.headers
+            });
+        }
         return Promise.reject(error);
-      }
     }
 );
 
